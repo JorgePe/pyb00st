@@ -1,1 +1,1 @@
-from movehub import movehub
+from movehub import MoveHub
