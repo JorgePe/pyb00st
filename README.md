@@ -37,7 +37,7 @@ the name of your Bluetooth controller (like "hci0").
 When you instantiate a movehub object a BLE connection is created. You should not assume that this
 connection is permanent so before using you should check if it exists - if not, you should reconnect
 
-# Example: #
+## Example: ##
 
 ```
 #!/usr/bin/env python3
@@ -52,3 +52,12 @@ if mymovehub.is_connected() == False :
 print( mymovehub.getAddress() )
 print( mymovehub.getName() )
 ```
+
+## Roadmap ##
+
+- Read the [python styling guide](https://www.python.org/dev/peps/pep-0008/).
+- Add methods for all output functions (motors, RGB Led)
+- Correct some bugs I'm facing with pygattlib and notifications
+- Add methods for a few input functions
+- Learn python :)
+- Exception handling, multithreading and more black magic
