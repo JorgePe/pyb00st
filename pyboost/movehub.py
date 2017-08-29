@@ -8,7 +8,7 @@ import sys
 # - exception handling
 #
 
-class movehub:
+class MoveHub:
     address = ""
     controller = ""
     req = GATTRequester
@@ -38,10 +38,10 @@ class movehub:
     def is_connected(self):
         return self.req.is_connected()
 
-    def getAddress(self):
+    def getaddress(self):
         return self.address
 
-    def getName(self):
+    def getname(self):
         self.connect()
         devicename=self.req.read_by_handle(0x07)
         return devicename[0]
