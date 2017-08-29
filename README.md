@@ -3,7 +3,7 @@ Python for LEGO BOOST
 
 The LEGO BOOST Move Hub is a BLE (Bluetooth Low Energy) device like the LEGO WeDo 2.0 Smart Hub
 and the Vengit SBrick which I already managed to control with the LEGO MINDSTORMS EV3 thanks to
-![pygattlib](https://bitbucket.org/OscarAcena/pygattlib), a python library fior BLE.
+![pygattlib](https://bitbucket.org/OscarAcena/pygattlib), a python library for BLE.
 
 I've been ![reverse engineering the LEGO BOOST](https://github.com/JorgePe/BOOSTreveng) Move Hub
 and since I'm now officially crazy I decided to try to write a python package.
