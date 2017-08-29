@@ -42,15 +42,15 @@ connection is permanent so before using you should check if it exists - if not, 
 ```
 #!/usr/bin/env python3
 
-from pyb00st import movehub
+from pyb00st import MoveHub
 
-mymovehub = movehub("00:16:53:A4:CD:7E", "hci0")
+mymovehub = MoveHub("00:16:53:A4:CD:7E", "hci0")
 if mymovehub.is_connected() == False :
     print("No connection")
     mymovehub.connect()
     
-print( mymovehub.getAddress() )
-print( mymovehub.getName() )
+print( mymovehub.getaddress() )
+print( mymovehub.getname() )
 ```
 
 ## Roadmap ##
