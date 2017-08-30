@@ -29,6 +29,18 @@ a recent version of BlueZ 5.x is required.
 
 Of course, your hardware needs BLE support.
 
+## Status: ##
+
+A MoveHub classe with some methods:
+- connect()
+- is_connected()
+- getaddress() #somewhat silly#
+- getname()
+- set_led_color(color)
+- motor_timed(motor, time_ms, dutycycle_pct)
+- motors_timed(motorgrp, time_ms, dutycycle_pct_A, dutycycle_pct_B)
+Some constants.
+
 ## Usage ##
 
 You need to know the Bluetooth address of your LEGO BOOST Move Hub (like "00:16:53:A4:CD:7E") and
@@ -52,6 +64,7 @@ if mymovehub.is_connected() == False :
 print( mymovehub.getaddress() )
 print( mymovehub.getname() )
 ```
+
 
 ## Roadmap ##
 
