@@ -2,12 +2,12 @@
 
 from gattlib import GATTRequester
 import sys
-
 from constants import *
 
 #
 # To Do:
 # - exception handling
+# - validate connection
 #
 
 
@@ -25,10 +25,6 @@ class MoveHub:
         self.connect()
 
 
-#
-# Connect:
-# - need to check if connection is OK or not
-#
     def connect(self):
 
         if self.req.is_connected() == True :
@@ -53,3 +49,49 @@ class MoveHub:
         if color in LED_COLORS :
             self.connect()
             self.req.write_by_handle(HANDLE, SET_LED_COLOR[LED_COLORS.index(color)] )
+
+    def motor_timed(self, motor, time_ms, dutycycle_pct):
+        if motor in MOTORS :
+            if dutycycle_pct in range (-100,101) :
+                command = MOTOR_TIMED_INI
+                command += motor
+                command += MOTOR_TIMED_MID
+                t = time_ms.to_bytes(2, byteorder='little')
+                command += t
+                if dutycycle_pct < 0 :
+                    dutycycle_pct += 255
+                command += bytes( bytes( chr(dutycycle_pct), 'latin-1' ) )
+                command += MOTOR_TIMED_END
+
+#                print("Final Command:", command)
+#                i=0
+#                for x in command:
+#                    print( i, x )
+#                    i+=1
+
+                self.req.write_by_handle(HANDLE, command )
+
+
+    def motors_timed(self, motor, time_ms, dutycycle_pct_A, dutycycle_pct_B):
+        if motor in MOTOR_PAIRS :
+            if dutycycle_pct_A in range (-100,101) and dutycycle_pct_B in range (-100,101) :
+                command = MOTORS_TIMED_INI
+                command += motor
+                command += MOTORS_TIMED_MID
+                t = time_ms.to_bytes(2, byteorder='little')
+                command += t
+                if dutycycle_pct_A < 0 :
+                    dutycycle_pct_A += 255
+                command += bytes( bytes( chr(dutycycle_pct_A), 'latin-1' ) )
+                if dutycycle_pct_B < 0 :
+                    dutycycle_pct_B += 255
+                command += bytes( bytes( chr(dutycycle_pct_B), 'latin-1' ) )
+                command += MOTORS_TIMED_END
+
+#                print("Final Command:", command)
+#                i=0
+#                for x in command:
+#                    print( i, x )
+#                    i+=1
+
+                self.req.write_by_handle(HANDLE, command )
