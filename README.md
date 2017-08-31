@@ -70,7 +70,7 @@ print( mymovehub.getname() )
 
 - Read the [python styling guide](https://www.python.org/dev/peps/pep-0008/).
 - Add methods for all output functions (motors, RGB Led)
-- Bypass Issue #1 so I can get notifications working (essential for reading sensors)
+- Bypass Issue pyb00ost#1 so I can get notifications working (essential for reading sensors)
 - Add methods for a few input functions
 - Learn python :)
 - Exception handling, multithreading and more black magic
