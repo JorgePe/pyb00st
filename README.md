@@ -70,7 +70,7 @@ print( mymovehub.getname() )
 
 - Read the [python styling guide](https://www.python.org/dev/peps/pep-0008/).
 - Add methods for all output functions (motors, RGB Led)
-- Correct some bugs I'm facing with pygattlib and notifications
+- Bypass Issue #1 so I can get notifications working (essential for reading sensors)
 - Add methods for a few input functions
 - Learn python :)
 - Exception handling, multithreading and more black magic
