@@ -24,10 +24,29 @@ devices.
 
 ## Requirements ##
 
-pyb00st needs only python 3 and pygattlib, but since pygattlib works only on linux systems with BlueZ,
-a recent version of BlueZ 5.x is required.
+pyb00st is intended for linux only (don't give up yet, good news ahead) and it requires BlueZ with BLE
+support so a recent version of linux is required.
 
-Of course, your hardware needs BLE support.
+Since I want to use it with ev3dev it also needs python3.
+
+And, of course, a BLE controller is also required.
+ 
+Currently there are two versions of pyb00st:
+- pyb00st based on pygattlib
+- pyb00st based on pygatt
+
+I started this project with pygattlib. It's a library that makes direct use of BlueZ and has been included
+in pybluez. But since python3 version of pygattlib has problems with notifications I started to use
+a different library, pygatt, that doesn't make direct use of Bluez - instead, it makes use of a *backend*.
+
+There are two backends for pygatt:
+- on linux, a gatttool backend makes system calls to BlueZ' gatttool
+- on Windows and OSX, a BlueGiga backend uses the BLE stack on a BlueGiga controller like the BLED112
+
+On linux, the gatttool backend approach results in slower performance than pygattlib. But it also requires
+much less dependencies... and it works with notifications!
+On Windows or OSX, you need an extra device like the BLED112, and drivers and the like.
+
 
 ## Status: ##
 
@@ -39,7 +58,9 @@ A MoveHub classe with some methods:
 - set_led_color(color)
 - motor_timed(motor, time_ms, dutycycle_pct)
 - motors_timed(motorgrp, time_ms, dutycycle_pct_A, dutycycle_pct_B)
+- color_sensor (pygatt version only)
 Some constants.
+
 
 ## Usage ##
 
