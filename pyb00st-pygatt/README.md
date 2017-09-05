@@ -1,4 +1,4 @@
-#pyb00st-pygatt
+# pyb00st-pygatt
 
 Had problems with pygattlib, notifications cause segmentation faults when using
 python3 version of pygattlib.
