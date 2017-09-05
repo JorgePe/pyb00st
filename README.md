@@ -60,7 +60,8 @@ The package implements:
    - motor_timed(motor, time_ms, dutycycle_pct)  
    - motors_timed(motorgrp, time_ms, dutycycle_pct_A, dutycycle_pct_B)  
    - color_sensor (pygatt version only)  
-   Some constants.  
+     
+   Some constants. 
 
 
 ## Usage ##
