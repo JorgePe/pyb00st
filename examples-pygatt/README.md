@@ -6,4 +6,6 @@ Since I'm still developping I dont have the libraries/packages where pyhton expe
 I change between pygattlib and pygatt versions by setting PYTHONPATH environment
 variable
 
+```
 export PYTHONPATH='/home/.../pyb00st_pygatt/'
+```
