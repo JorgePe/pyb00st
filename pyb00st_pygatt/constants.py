@@ -70,15 +70,29 @@ MOTORS_TIMED_END = b'\x64\x7f\x03'
 
 
 # Commands for Color Sensor
-COLOR_SENSOR_ON_C = b'\x0a\x00\x41\x01\x08\x01\x00\x00\x00\x01'
-COLOR_SENSOR_ON_D = b'\x0a\x00\x41\x02\x08\x01\x00\x00\x00\x01'
+LISTEN_COLOR_SENSOR_ON_C = b'\x0a\x00\x41\x01\x08\x01\x00\x00\x00\x01'
+LISTEN_COLOR_SENSOR_ON_D = b'\x0a\x00\x41\x02\x08\x01\x00\x00\x00\x01'
 
 # Sensor Colors:
-COLOR_SENSOR_COLORS = ['BLACK','','','BLUE','','GREEN','','YELLOW','','RED','WHITE']
+LISTEN_COLOR_SENSOR_COLORS = ['BLACK','','','BLUE','','GREEN','','YELLOW','','RED','WHITE']
 
 
 # Commands for Distance Sensor
-DIST_SENSOR_ON_C = b'\x0a\x00\x41\x01\x08\x01\x00\x00\x00\x01'
-DIST_SENSOR_ON_D = b'\x0a\x00\x41\x02\x08\x01\x00\x00\x00\x01'
+LISTEN_DIST_SENSOR_ON_C = b'\x0a\x00\x41\x01\x08\x01\x00\x00\x00\x01'
+LISTEN_DIST_SENSOR_ON_D = b'\x0a\x00\x41\x02\x08\x01\x00\x00\x00\x01'
 
+
+# Commands for Reading Encoders
+
+LISTEN_ENCODER_ON_A = b'\x0a\x00\x41\x37\x02\x01\x00\x00\x00\x01'
+LISTEN_ENCODER_ON_B = b'\x0a\x00\x41\x38\x02\x01\x00\x00\x00\x01'
+LISTEN_ENCODER_ON_C = b'\x0a\x00\x41\x01\x02\x01\x00\x00\x00\x01'
+LISTEN_ENCODER_ON_D = b'\x0a\x00\x41\x02\x02\x01\x00\x00\x00\x01'
+
+
+# Commands for Reading Button
+LISTEN_BUTTON = b'\x05\x00\x01\x02\x02'
+
+BUTTON_PRESSED = '\x01'
+BUTTON_RELEASED = '\x00'
 

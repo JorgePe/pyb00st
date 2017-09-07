@@ -11,9 +11,14 @@ MY_MOVEHUB_ADD = '00:16:53:A4:CD:7E'
 MY_BTCTRLR_HCI = 'hci0'
 
 mymovehub = MoveHub(MY_MOVEHUB_ADD, MY_BTCTRLR_HCI)
-mymovehub.subscribe(mymovehub.read_distance_sensor)
-mymovehub.listen_distance_sensor(PORT_C)
+mymovehub.subscribe(mymovehub.read_button)
+mymovehub.listen_button()
 
 while True:
     sleep(0.2)
-    print(mymovehub.last_distance)
+    if mymovehub.last_button == BUTTON_PRESSED :
+        print('PRESSED')
+    elif mymovehub.last_button == BUTTON_RELEASED :
+        print('RELEASED')
+    else:
+        print('')

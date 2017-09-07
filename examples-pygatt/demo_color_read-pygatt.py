@@ -12,7 +12,7 @@ MY_BTCTRLR_HCI = 'hci0'
 
 mymovehub = MoveHub(MY_MOVEHUB_ADD, MY_BTCTRLR_HCI)
 mymovehub.subscribe(mymovehub.read_color_sensor)
-mymovehub.init_color_sensor(PORT_C)
+mymovehub.listen_color_sensor(PORT_C)
 
 while True:
     sleep(0.2)
