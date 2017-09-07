@@ -52,19 +52,17 @@ On Windows or OSX, you need an extra device like the BLED112, and drivers and th
 
 The package implements:  
    - Some constants  
-   - A MoveHub class with some methods:  
-     - connect()  
-     - is_connected()  
-     - getaddress() #somewhat silly#  
-     - getname()  
-     - set_led_color(color)  
-     - motor_timed(motor, time_ms, dutycycle_pct)  
-     - motors_timed(motorgrp, time_ms, dutycycle_pct_A, dutycycle_pct_B)  
+   - A MoveHub class with some methods, including:    
+     - controlling RGB LED color  
+     - controlling Interactive motors (just timed)  
      
    - The pygatt version also implements:
-     - color_sensor  
-     - distance_sensor  
+     - reading Color Sensor   
+     - reading Distance Sensor
+     - reading Encoders
+     - reading Button  
 
+All code is still 'alpha'.
 
 ## Usage ##
 
@@ -94,8 +92,7 @@ print( mymovehub.getname() )
 ## Roadmap ##
 
 - Read the [python styling guide](https://www.python.org/dev/peps/pep-0008/).
-- Add methods for all output functions (motors, RGB Led)
-- Bypass [Issue#1](https://github.com/JorgePe/pyb00st/issues/1) so I can get notifications working (essential for reading sensors)
-- Add methods for a few input functions
+- Add some output methods (at least motor control by angle)
+- Improve all input methods
 - Learn python :)
 - Exception handling, multithreading and more black magic
