@@ -51,17 +51,19 @@ On Windows or OSX, you need an extra device like the BLED112, and drivers and th
 ## Status: ##
 
 The package implements:  
-   A MoveHub class with some methods:  
-   - connect()  
-   - is_connected()  
-   - getaddress() #somewhat silly#  
-   - getname()  
-   - set_led_color(color)  
-   - motor_timed(motor, time_ms, dutycycle_pct)  
-   - motors_timed(motorgrp, time_ms, dutycycle_pct_A, dutycycle_pct_B)  
-   - color_sensor (pygatt version only)  
+   - Some constants  
+   - A MoveHub class with some methods:  
+     - connect()  
+     - is_connected()  
+     - getaddress() #somewhat silly#  
+     - getname()  
+     - set_led_color(color)  
+     - motor_timed(motor, time_ms, dutycycle_pct)  
+     - motors_timed(motorgrp, time_ms, dutycycle_pct_A, dutycycle_pct_B)  
      
-   Some constants. 
+   - The pygatt version also implements:
+     - color_sensor  
+     - distance_sensor  
 
 
 ## Usage ##
