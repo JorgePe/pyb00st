@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
 import pygatt
-from constants import *
+#from constants import *
+from pyb00st_pygatt.constants import *
 
 #
 # To Do:
@@ -14,6 +15,7 @@ class MoveHub:
     address = ""
     controller = ""
     last_color = ''
+    last_distance = ''
 
     def __init__(self, address, controller):
         ''' Constructor for this class. '''
@@ -109,5 +111,21 @@ class MoveHub:
         if handle == MOVE_HUB_HARDWARE_HANDLE :
             if value[4] != 0xFF :
                  self.last_color = COLOR_SENSOR_COLORS[value[4]]
+            else:
+                 self.last_color = ''
 
+    def init_distance_sensor(self, port):
+        if port == 'C' :
+            self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, DIST_SENSOR_ON_C)
+        elif port == 'D' :
+            self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, DIST_SENSOR_ON_D)
+
+    def read_distance_sensor(self, handle, value):
+        # to be used as callback when subscribing notifications
+        if handle == MOVE_HUB_HARDWARE_HANDLE :
+#             print(value)
+            if value[4] == 0xFF :
+                 self.last_distance = str(value[5])
+            else:
+                 self.last_distance = ''
 

@@ -77,3 +77,8 @@ COLOR_SENSOR_ON_D = b'\x0a\x00\x41\x02\x08\x01\x00\x00\x00\x01'
 COLOR_SENSOR_COLORS = ['BLACK','','','BLUE','','GREEN','','YELLOW','','RED','WHITE']
 
 
+# Commands for Distance Sensor
+DIST_SENSOR_ON_C = b'\x0a\x00\x41\x01\x08\x01\x00\x00\x00\x01'
+DIST_SENSOR_ON_D = b'\x0a\x00\x41\x02\x08\x01\x00\x00\x00\x01'
+
+
