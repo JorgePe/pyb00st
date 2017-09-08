@@ -16,8 +16,15 @@ class MoveHub:
     controller = ""
     last_color = ''
     last_distance = ''
-    last_encoder = ''
+    last_encoder_port = ''
+    last_encoder_angle = ''
     last_button = ''
+
+    color_sensor_port = ''   # to know where the sensor is inserted so we can
+                               # understand notifications
+
+    distance_sensor_port = ''   # to know where the sensor is inserted so we can
+                                  # understand notifications
 
     def __init__(self, address, controller):
         ''' Constructor for this class. '''
@@ -111,38 +118,68 @@ class MoveHub:
 # Color
 
     def listen_color_sensor(self, port):
-        if port == 'C' :
+        if port == PORT_C :
             self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, LISTEN_COLOR_SENSOR_ON_C)
-        elif port == 'D' :
+            self.color_sensor_port = port
+        elif port == PORT_D :
             self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, LISTEN_COLOR_SENSOR_ON_D)
+            self.color_sensor_port = port
 
     def read_color_sensor(self, handle, value):
-        # to be used as callback when subscribing notifications
+        # callback funtion
         if handle == MOVE_HUB_HARDWARE_HANDLE :
-            if value[4] != 0xFF :
-                 self.last_color = COLOR_SENSOR_COLORS[value[4]]
-            else:
-                 self.last_color = ''
+
+            # expected: 08 00 45 pp xx aa bb cc
+            # pp = port
+            # xx = FF or color
+            # aa, bb, cc = unknown
+
+            # we assume only 1 color sensor is possible
+
+            if value[0] == 0x08 and \
+                value[1] == 0x00 and \
+                value[2] == 0x45 and \
+                value[3] == self.color_sensor_port :
+
+                if value[4] != 0xFF :
+                    self.last_color = COLOR_SENSOR_COLORS[value[4]]
+                else:
+                    self.last_color = ''
 
     def subscribe_color(self):
+        # we assume only 1 color sensor is possible
         self.device.subscribe(MOVE_HUB_HARDWARE_UUID, self.read_color_sensor)
 
 
 # Distance
 
     def listen_distance_sensor(self, port):
-        if port == 'C' :
+        if port == PORT_C :
             self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, LISTEN_DIST_SENSOR_ON_C)
-        elif port == 'D' :
+            self.distance_sensor_port = port
+        elif port == PORT_D :
             self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, LISTEN_DIST_SENSOR_ON_D)
+            self.distance_sensor_port = port
 
     def read_distance_sensor(self, handle, value):
-        # to be used as callback when subscribing notifications
+        # callback funtion
         if handle == MOVE_HUB_HARDWARE_HANDLE :
-            if value[4] == 0xFF :
-                 self.last_distance = str(value[5])
-            else:
-                 self.last_distance = ''
+           # expected: 08 00 45 pp aa xx bb cc 
+            # pp = port
+            # xx = distance
+            # aa, bb, cc = unknown
+
+            # we assume only 1 distance sensor is possible
+
+            if value[0] == 0x08 and \
+                value[1] == 0x00 and \
+                value[2] == 0x45 and \
+                value[3] == self.distance_sensor_port :
+
+                if value[4] == 0xFF :
+                    self.last_distance = str(value[5])
+                else:
+                    self.last_distance = ''
 
     def subscribe_distance(self):
         self.device.subscribe(MOVE_HUB_HARDWARE_UUID, self.read_distance_sensor)
@@ -150,22 +187,34 @@ class MoveHub:
 # Encoder #
 
     def listen_encoder_sensor(self, port):
-        if port == 'A' :
+        if port == PORT_A :
             self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, LISTEN_ENCODER_ON_A)
-        elif port == 'B' :
+        elif port == PORT_B :
             self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, LISTEN_ENCODER_ON_B)
-        elif port == 'C' :
+        elif port == PORT_C :
             self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, LISTEN_ENCODER_ON_C)
-        elif port == 'D' :
+        elif port == PORT_D :
             self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, LISTEN_ENCODER_ON_D)
 
     def read_encoder_sensor(self, handle, value):
-        # to be used as callback when subscribing notifications
+        # callback funtion
+        # probably will have to make a callback function for every encoder
 
         if handle == MOVE_HUB_HARDWARE_HANDLE :
-            self.last_encoder = value[4] + value[5]*256 + value[6]*65536 + value[7]*16777216
-            if self.last_encoder > 2147483648 :
-                self.last_encoder = self.last_encoder - 4294967296
+
+            # expected: 08 00 45 pp xx xx xx xx
+            # pp = port
+            # xx xx xx xx = angle
+
+            if value[0] == 0x08 and \
+                value[1] == 0x00 and \
+                value[2] == 0x45 :
+
+                self.last_encoder_port = value[3]
+
+                self.last_encoder_angle = value[4] + value[5]*256 + value[6]*65536 + value[7]*16777216
+                if self.last_encoder_angle > ENCODER_MID :
+                    self.last_encoder_angle = self.last_encoder_angle - ENCODER_MAX
 
     def subscribe_encoder(self):
         self.device.subscribe(MOVE_HUB_HARDWARE_UUID, self.read_encoder_sensor)
@@ -176,15 +225,23 @@ class MoveHub:
         self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, LISTEN_BUTTON)
 
     def read_button(self, handle, value):
-        # to be used as callback when subscribing notifications
+        # callback funtion
 
         if handle == MOVE_HUB_HARDWARE_HANDLE :
-            if value[5] == 1 :
-                self.last_button = BUTTON_PRESSED
-            elif value[5] == 0 :
-                self.last_button = BUTTON_RELEASED
-            else :
-                self.last_button = ''
+            # expected: 06 00 01 02 06 xx , xx = 00 / 01
+
+            if value[0] == 0x06 and \
+                value[1] == 0x00 and \
+                value[2] == 0x01 and \
+                value[3] == 0x02 and \
+                value[4] == 0x06 :
+
+                if value[5] == 1 :
+                    self.last_button = BUTTON_PRESSED
+                elif value[5] == 0 :
+                    self.last_button = BUTTON_RELEASED
+                else :
+                    self.last_button = ''
 
     def subscribe_button(self):
         self.device.subscribe(MOVE_HUB_HARDWARE_UUID, self.read_button)

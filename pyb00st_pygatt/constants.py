@@ -7,10 +7,10 @@ MOVE_HUB_HARDWARE_UUID = '00001624-1212-efde-1623-785feabcd123'
 
 # Ports
 
-PORT_A = 'A'
-PORT_B = 'B'
-PORT_C = 'C'
-PORT_D = 'D'
+PORT_A = 0x37
+PORT_B = 0x38
+PORT_C = 0x01
+PORT_D = 0x02
 
 # Commands for setting RGB LED color
 SET_LED_OFF = b'\x08\x00\x81\x32\x11\x51\x00\x00'
@@ -89,6 +89,9 @@ LISTEN_ENCODER_ON_B = b'\x0a\x00\x41\x38\x02\x01\x00\x00\x00\x01'
 LISTEN_ENCODER_ON_C = b'\x0a\x00\x41\x01\x02\x01\x00\x00\x00\x01'
 LISTEN_ENCODER_ON_D = b'\x0a\x00\x41\x02\x02\x01\x00\x00\x00\x01'
 
+# 
+ENCODER_MID = 2147483648
+ENCODER_MAX = 4294967296
 
 # Commands for Reading Button
 LISTEN_BUTTON = b'\x05\x00\x01\x02\x02'
