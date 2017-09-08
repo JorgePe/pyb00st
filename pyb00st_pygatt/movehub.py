@@ -98,15 +98,17 @@ class MoveHub:
 
                 self.device.write_handle(MOVE_HUB_HARDWARE_HANDLE, command )
 
-    def subscribe(self, callback_function):
-        self.device.subscribe(MOVE_HUB_HARDWARE_UUID, callback_function)
+
 
 #
 # Caution!
-# Sensor are not finished yet
+# Sensors are not finished yet
 # notifications are not proper checked for each sensor
 # so be sure to initialize just one sensor
 #
+
+
+# Color
 
     def listen_color_sensor(self, port):
         if port == 'C' :
@@ -122,6 +124,12 @@ class MoveHub:
             else:
                  self.last_color = ''
 
+    def subscribe_color(self):
+        self.device.subscribe(MOVE_HUB_HARDWARE_UUID, self.read_color_sensor)
+
+
+# Distance
+
     def listen_distance_sensor(self, port):
         if port == 'C' :
             self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, LISTEN_DIST_SENSOR_ON_C)
@@ -136,6 +144,10 @@ class MoveHub:
             else:
                  self.last_distance = ''
 
+    def subscribe_distance(self):
+        self.device.subscribe(MOVE_HUB_HARDWARE_UUID, self.read_distance_sensor)
+
+# Encoder #
 
     def listen_encoder_sensor(self, port):
         if port == 'A' :
@@ -155,7 +167,10 @@ class MoveHub:
             if self.last_encoder > 2147483648 :
                 self.last_encoder = self.last_encoder - 4294967296
 
+    def subscribe_encoder(self):
+        self.device.subscribe(MOVE_HUB_HARDWARE_UUID, self.read_encoder_sensor)
 
+# Button
 
     def listen_button(self):
         self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, LISTEN_BUTTON)
@@ -170,3 +185,9 @@ class MoveHub:
                 self.last_button = BUTTON_RELEASED
             else :
                 self.last_button = ''
+
+    def subscribe_button(self):
+        self.device.subscribe(MOVE_HUB_HARDWARE_UUID, self.read_button)
+
+
+
