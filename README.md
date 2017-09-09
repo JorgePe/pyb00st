@@ -45,13 +45,14 @@ There are two backends for pygatt:
 
 On linux, the gatttool backend approach results in slower performance than pygattlib. But it also requires
 much less dependencies... and it works with notifications!
-On Windows or OSX, you need an extra device like the BLED112, and drivers and the like.
+On Windows or OSX, you need an extra device like the BLED112, and drivers and the like. I don't have any
+non-linux system but when I've the time, I'll test it with a Windows VM.
 
 
 ## Status: ##
 
 The package implements:  
-   - Some constants  
+   - A few constants  
    - A MoveHub class with some methods, including:    
      - controlling RGB LED color  
      - controlling Interactive motors (just timed)  
@@ -64,8 +65,10 @@ The package implements:
      - reading Tilt (Basic Mode)  
      - controlling Interactive motors (timed and angle)  
 
-I'm almost considering this code 'beta' level, just need to polish it a bit and make detailed
-tests.
+I've made good progress with the pygatt version and I'm almost considering this code 'beta' level,
+just need to polish it a bit and make detailed tests.
+Backporting to pygattlib version is not a priority now.
+
 
 ## Usage ##
 
@@ -94,8 +97,8 @@ print( mymovehub.getname() )
 
 ## Roadmap ##
 
-- Read the [python styling guide](https://www.python.org/dev/peps/pep-0008/).
-- Add some output methods (at least motor control by angle)
-- Improve all input methods
-- Learn python :)
-- Exception handling, multithreading and more black magic
+- Keep reading the [python styling guide](https://www.python.org/dev/peps/pep-0008/).
+- Add some input and output methods
+- Improve all methods
+- Keep learning python :)
+- Exception handling, multithreading and all that black magic
