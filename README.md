@@ -62,8 +62,10 @@ The package implements:
      - reading Motor Encoders
      - reading Button  
      - reading Tilt (Basic Mode)  
+     - controlling Interactive motors by angle  
 
-All code is still 'alpha'.
+I'm almost considering this code 'beta' level, just need to polish it a bit and make detailed
+tests.
 
 ## Usage ##
 
