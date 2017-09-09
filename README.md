@@ -59,8 +59,9 @@ The package implements:
    - The pygatt version also implements:
      - reading Color Sensor   
      - reading Distance Sensor
-     - reading Encoders
+     - reading Motor Encoders
      - reading Button  
+     - reading Tilt (Basic Mode)  
 
 All code is still 'alpha'.
 
