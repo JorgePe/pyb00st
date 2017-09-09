@@ -67,6 +67,9 @@ MOTORS_TIMED_INI = b'\x0d\x01\x81'
 MOTORS_TIMED_MID = b'\x11\x0A'
 MOTORS_TIMED_END = b'\x64\x7f\x03'
 
+MOTOR_ANGLE_INI = b'\x0e\x01\x81'
+MOTOR_ANGLE_MID = b'\x11\x0b'
+MOTOR_ANGLE_END = b'\x64\x7f\x03'
 
 
 # Commands for Color Sensor

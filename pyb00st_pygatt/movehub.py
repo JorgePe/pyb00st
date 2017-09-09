@@ -82,7 +82,7 @@ class MoveHub:
                 command += bytes( bytes( chr(dutycycle_pct), 'latin-1' ) )
                 command += MOTOR_TIMED_END
 
-                self.device.write_handle(MOVE_HUB_HARDWARE_HANDLE, command )
+                self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, command )
 
 
     def motors_timed(self, motor, time_ms, dutycycle_pct_A, dutycycle_pct_B):
@@ -101,8 +101,23 @@ class MoveHub:
                 command += bytes( bytes( chr(dutycycle_pct_B), 'latin-1' ) )
                 command += MOTORS_TIMED_END
 
-                self.device.write_handle(MOVE_HUB_HARDWARE_HANDLE, command )
+                self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, command )
 
+
+    def motor_angle(self, motor, angle, dutycycle_pct):
+        if motor in MOTORS :
+            if dutycycle_pct in range (-100,101) :
+                command = MOTOR_ANGLE_INI
+                command += motor
+                command += MOTOR_ANGLE_MID
+                ang = angle.to_bytes(4, byteorder='little')
+                command += ang
+                if dutycycle_pct < 0 :
+                    dutycycle_pct += 255
+                command += bytes( bytes( chr(dutycycle_pct), 'latin-1' ) )
+                command += MOTOR_ANGLE_END
+
+                self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, command )
 
 
 #
