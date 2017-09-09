@@ -12,7 +12,7 @@ MY_BTCTRLR_HCI = 'hci0'
 
 mymovehub = MoveHub(MY_MOVEHUB_ADD, MY_BTCTRLR_HCI)
 
-# turn motor ON for 1000 ms at 100% duty cycle in both directions
+# turn motor A ON for 1000 ms at 100% duty cycle in both directions
 mymovehub.motor_timed(MOTOR_A, 1000, 100)
 sleep(1)
 mymovehub.motor_timed(MOTOR_A, 1000, -100)
@@ -24,3 +24,27 @@ sleep(0.5)
 mymovehub.motor_angle(MOTOR_A, 90, 100)
 sleep(0.5)
 mymovehub.motor_angle(MOTOR_A, 90, -100)
+
+sleep(0.5)
+
+# turn pair AB ON for 1000 ms at 100% duty cycle in both direction
+mymovehub.motors_timed(MOTOR_AB, 1000, 100, 100)
+sleep(1)
+mymovehub.motors_timed(MOTOR_AB, 1000, 100, -100)
+sleep(1)
+mymovehub.motors_timed(MOTOR_AB, 1000, -100, -100)
+sleep(1)
+mymovehub.motors_timed(MOTOR_AB, 1000, -100, 100)
+sleep(1)
+
+sleep(0.5)
+
+# rotate pair AB 90 degrees at 100% duty cycle in both direction
+mymovehub.motors_angle(MOTOR_AB, 90, 100, 100)
+sleep(0.5)
+mymovehub.motors_angle(MOTOR_AB, 90, 100, -100)
+sleep(0.5)
+mymovehub.motors_angle(MOTOR_AB, 90, -100, -100)
+sleep(0.5)
+mymovehub.motors_angle(MOTOR_AB, 90, -100, 100)
+sleep(0.5)

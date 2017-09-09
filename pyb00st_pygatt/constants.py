@@ -71,6 +71,9 @@ MOTOR_ANGLE_INI = b'\x0e\x01\x81'
 MOTOR_ANGLE_MID = b'\x11\x0b'
 MOTOR_ANGLE_END = b'\x64\x7f\x03'
 
+MOTORS_ANGLE_INI = b'\x0f\x01\x81'
+MOTORS_ANGLE_MID = b'\x11\x0c'
+MOTORS_ANGLE_END = b'\x64\x7f\x03'
 
 # Commands for Color Sensor
 LISTEN_COLOR_SENSOR_ON_C = b'\x0a\x00\x41\x01\x08\x01\x00\x00\x00\x01'

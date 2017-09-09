@@ -84,7 +84,8 @@ class MoveHub:
 
                 self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, command )
 
-
+    # should find a way to merge this with other motors, later on
+    # need to accpet different number of parameters
     def motors_timed(self, motor, time_ms, dutycycle_pct_A, dutycycle_pct_B):
         if motor in MOTOR_PAIRS :
             if dutycycle_pct_A in range (-100,101) and dutycycle_pct_B in range (-100,101) :
@@ -116,6 +117,25 @@ class MoveHub:
                     dutycycle_pct += 255
                 command += bytes( bytes( chr(dutycycle_pct), 'latin-1' ) )
                 command += MOTOR_ANGLE_END
+
+                self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, command )
+
+
+    def motors_angle(self, motor, angle, dutycycle_pct_A, dutycycle_pct_B):
+        if motor in MOTORS :
+            if dutycycle_pct_A in range (-100,101) and dutycycle_pct_B in range (-100,101) :
+                command = MOTORS_ANGLE_INI
+                command += motor
+                command += MOTORS_ANGLE_MID
+                ang = angle.to_bytes(4, byteorder='little')
+                command += ang
+                if dutycycle_pct_A < 0 :
+                    dutycycle_pct_A += 255
+                command += bytes( bytes( chr(dutycycle_pct_A), 'latin-1' ) )
+                if dutycycle_pct_B < 0 :
+                    dutycycle_pct_B += 255
+                command += bytes( bytes( chr(dutycycle_pct_B), 'latin-1' ) )
+                command += MOTORS_ANGLE_END
 
                 self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, command )
 
