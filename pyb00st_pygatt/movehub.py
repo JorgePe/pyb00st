@@ -48,7 +48,12 @@ class MoveHub:
     def __init__(self, address, controller): 
         self.address=address
         self.controller=controller
-        self.adapter = pygatt.GATTToolBackend()
+
+#
+# from pygatt source code, GATTToolBackend acepts:
+# hci_device='hci0', gatttool_logfile=None,cli_options=None
+#
+        self.adapter = pygatt.GATTToolBackend(hci_device=controller)
         self.adapter.start()
         self.connect()
 

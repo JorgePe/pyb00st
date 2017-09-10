@@ -6,8 +6,6 @@ from pyb00st_pygatt.constants import *
 from time import sleep
 
 MY_MOVEHUB_ADD = '00:16:53:A4:CD:7E'
-
-# not used - need to find how where on pygatt we can choose the hci controller
 MY_BTCTRLR_HCI = 'hci0'
 
 mymovehub = MoveHub(MY_MOVEHUB_ADD, MY_BTCTRLR_HCI)
