@@ -97,7 +97,7 @@ if mymovehub.is_connected() == False :
 print( mymovehub.getaddress() )
 print( mymovehub.getname() )
 ```
-
+See also examples folder on source code tree.
 
 ## Roadmap ##
 
@@ -109,6 +109,7 @@ print( mymovehub.getname() )
   - check BLE connection
   - disconnect
   - read tilt in full mode
+  - WeDo sensors (tilt and distance)
 - Improve all methods
 - Keep learning python :)
 - Exception handling, multithreading and all that black magic
