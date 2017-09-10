@@ -76,7 +76,10 @@ You need to know the Bluetooth address of your LEGO BOOST Move Hub (like "00:16:
 the name of your Bluetooth controller (like "hci0").
 
 When you instantiate a movehub object a BLE connection is created. You should not assume that this
-connection is permanent so before using you should check if it exists - if not, you should reconnect
+connection is permanent so before using you should check if it exists - if not, you should reconnect.
+
+Currently, there is no method to check the presence of external sensors, we need to define it on
+our code.
 
 ## Example: ##
 
@@ -98,7 +101,13 @@ print( mymovehub.getname() )
 ## Roadmap ##
 
 - Keep reading the [python styling guide](https://www.python.org/dev/peps/pep-0008/).
-- Add some input and output methods
+- Add some input and output methods:
+  - battery (still not understood)
+  - read enconder of port group A+B
+  - deactivate sensors
+  - check BLE connection
+  - disconnect
+  - read tilt in full mode
 - Improve all methods
 - Keep learning python :)
 - Exception handling, multithreading and all that black magic
