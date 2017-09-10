@@ -14,15 +14,23 @@ from pyb00st_pygatt.constants import *
 class MoveHub:
     address = ""
 
+    # internal definitions
     color_sensor_on_C = False
     color_sensor_on_D = False
+
     distance_sensor_on_C = False
     distance_sensor_on_D = False
+
     motor_encoder_on_C = False
     motor_encoder_on_D = False
 
+    tilt_basic = True
+
+    # internal sensor values
+
     last_color_C = ''
     last_color_D = ''
+
     last_distance_C = ''
     last_distance_D = ''
 
@@ -34,24 +42,20 @@ class MoveHub:
 
     last_button = ''
 
-    tilt_basic = True
     last_tilt = ''
 
 
-
-    def __init__(self, address, controller):
-        ''' Constructor for this class. '''
- 
+    def __init__(self, address, controller): 
         self.address=address
         self.controller=controller
-
         self.adapter = pygatt.GATTToolBackend()
         self.adapter.start()
         self.connect()
 
     def connect(self):
-
         self.device = self.adapter.connect(self.address)
+
+    # missings disconnect() method
 
     def is_connected(self):
         ### Useless - needs thinking
@@ -65,10 +69,25 @@ class MoveHub:
         devicename=self.device.char_read_handle(0x07)
         return devicename.decode("utf-8")
 
+#
+#
+# set_led_color()
+#  accepts one of the 10 colors (plus Off) defined in constants.py
+#
+#
     def set_led_color(self, color):
         if color in LED_COLORS :
             self.device.write_handle(MOVE_HUB_HARDWARE_HANDLE, SET_LED_COLOR[LED_COLORS.index(color)] )
 
+#
+#
+# motor_timed()
+# motors_timed()
+#  accepts a motor (defined in constants.py), a time in milliseconds and a dutycycle in percentage
+#  to change direction use negative dutycycle
+#  should find a way to merge the 2 methods, later on
+#
+#
     def motor_timed(self, motor, time_ms, dutycycle_pct):
         if motor in MOTORS :
             if dutycycle_pct in range (-100,101) :
@@ -84,8 +103,7 @@ class MoveHub:
 
                 self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, command )
 
-    # should find a way to merge this with other motors, later on
-    # need to accpet different number of parameters
+
     def motors_timed(self, motor, time_ms, dutycycle_pct_A, dutycycle_pct_B):
         if motor in MOTOR_PAIRS :
             if dutycycle_pct_A in range (-100,101) and dutycycle_pct_B in range (-100,101) :
@@ -104,7 +122,15 @@ class MoveHub:
 
                 self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, command )
 
-
+#
+#
+# motor_angle()
+# motors_angle()
+#  accepts a motor (defined in constants.py), an angle in degrees and a dutycycle in percentage
+#  to change direction use negative dutycycle
+#  should find a way to merge the 2 methods, later on
+#
+#
     def motor_angle(self, motor, angle, dutycycle_pct):
         if motor in MOTORS :
             if dutycycle_pct in range (-100,101) :
@@ -141,14 +167,15 @@ class MoveHub:
 
 
 #
+#
 # Sensors depend on Notifications
-# we subscribe for notifications and activate the sensors we want
-# then we are notified each time a sensor changes
+# we subscribe for notifications and activate the sensors we want to be notified
+# notifications are sent each time an active sensor changes
 #
-# Considering using some kind of flag to indicate change of sensor values
+# currently, an internal variable holds last sensor value
+# so we have to poll the variable
 #
-
-
+#
     def parse_notifications(self, handle, value):
         # callback funtion
         if handle == MOVE_HUB_HARDWARE_HANDLE :
@@ -277,10 +304,17 @@ class MoveHub:
     def subscribe_all(self):
         self.device.subscribe(MOVE_HUB_HARDWARE_UUID, self.parse_notifications)
 
-# Color
+#
+#
+# Methods that activate sensors
+# (no method for deactivate yet)
+#
+#
 
-    # Color Sensor can be at port C or D (probably also both)
-
+#
+# Color Sensor
+# - external device, can be at port C or D (probably also at both)
+#
     def listen_color_sensor(self, port):
         if port == PORT_C :
             self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, LISTEN_COLOR_SENSOR_ON_C)
@@ -289,11 +323,10 @@ class MoveHub:
             self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, LISTEN_COLOR_SENSOR_ON_D)
             self.color_sensor_on_D = True
 
-
-# Distance
-
-    # Distance Sensor can be at port C or D (probably also both)
-
+#
+# Distance Sensor
+# - external device, can be at port C or D (probably also at both)
+#
     def listen_distance_sensor(self, port):
         if port == PORT_C :
             self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, LISTEN_DIST_SENSOR_ON_C)
@@ -302,9 +335,12 @@ class MoveHub:
             self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, LISTEN_DIST_SENSOR_ON_D)
             self.distance_sensor_on_D = True
 
-
-# Encoder
-
+#
+# Encoder Sensor
+# - there are 2 intenal encoders at ports A and B
+# - there is also an external Interactive Motor, can be at port C or D (probably also at both)
+# - missing reading of port group AB
+#
     def listen_encoder_sensor(self, port):
         if port == PORT_A :
             self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, LISTEN_ENCODER_ON_A)
@@ -316,15 +352,20 @@ class MoveHub:
         elif port == PORT_D :
             self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, LISTEN_ENCODER_ON_D)
             self.motor_encoder_on_D = True
-
-# Button
-
+#
+# Button Sensor
+# - internal device, reacts to PRESS and DEPRESS actions
+#
     def listen_button(self):
         self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, LISTEN_BUTTON)
 
-
-# Tilt
-
+#
+# Tilt Sensor
+# - internal device, reacts to pitch and roll (but not yaw, at least with current firmware)
+# - at least two modes: basic and full
+# - basic mode returns only to 6 extreme 90º positions defined at constants.py 
+# - full mode (still missing) returns all positions, 1º resolution
+#
     def listen_tilt(self, tilt_basic):
         if tilt_basic == True:
             self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, LISTEN_TILT_BASIC)
