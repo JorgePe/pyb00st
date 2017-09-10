@@ -3,6 +3,7 @@
 #
 # This example needs the color sensor at PORT C
 # and same sort of car with wheels on PORT A and B
+# video: https://youtu.be/8XWXnisMeAY
 #
 
 from pyb00st_pygatt.movehub import MoveHub
