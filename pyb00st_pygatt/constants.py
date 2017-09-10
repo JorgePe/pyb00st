@@ -54,7 +54,7 @@ MOTORS = [MOTOR_A, MOTOR_B, MOTOR_AB, MOTOR_C, MOTOR_D]
 # a group of 1 is silly but there might be other pairs in the future
 MOTOR_PAIRS = [MOTOR_AB]
 
-# Commands for motors (Timed):
+# Commands for Interactive Motors (Timed):
 
 # Motor A, B, C, D: 12-byte commands
 # Motor AB: 13-byte commands
@@ -67,6 +67,11 @@ MOTORS_TIMED_INI = b'\x0d\x01\x81'
 MOTORS_TIMED_MID = b'\x11\x0A'
 MOTORS_TIMED_END = b'\x64\x7f\x03'
 
+# Commands for Interactive Motors (Angle):
+
+# Motor A, B, C, D: 14-byte commands
+# Motor AB: 15-byte commands
+
 MOTOR_ANGLE_INI = b'\x0e\x01\x81'
 MOTOR_ANGLE_MID = b'\x11\x0b'
 MOTOR_ANGLE_END = b'\x64\x7f\x03'
@@ -74,6 +79,10 @@ MOTOR_ANGLE_END = b'\x64\x7f\x03'
 MOTORS_ANGLE_INI = b'\x0f\x01\x81'
 MOTORS_ANGLE_MID = b'\x11\x0c'
 MOTORS_ANGLE_END = b'\x64\x7f\x03'
+
+# Commands for WeDo Motors (just Duty Cycle):
+MOTOR_WEDO_INI = b'\x08\x00\x81'
+MOTOR_WEDO_MID = b'\x11\x51\x00'
 
 # Commands for Color Sensor
 LISTEN_COLOR_SENSOR_ON_C = b'\x0a\x00\x41\x01\x08\x01\x00\x00\x00\x01'

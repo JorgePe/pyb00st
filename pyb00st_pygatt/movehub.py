@@ -165,6 +165,27 @@ class MoveHub:
 
                 self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, command )
 
+#
+#
+# motor_wedo()
+# - external device, can be at port C or D or both
+#  accepts a port and a dutycycle in percentage
+#  to change direction use negative dutycycle
+#  to stop use zero dutycycle
+#
+#
+
+    def motor_wedo(self, port, dutycycle_pct):
+        if port==PORT_C or port==PORT_D:
+            if dutycycle_pct in range (-100,101) :
+                command = MOTOR_WEDO_INI
+                command += bytes([port])
+                command += MOTOR_WEDO_MID
+                if dutycycle_pct < 0 :
+                    dutycycle_pct += 255
+                command += bytes( bytes( chr(dutycycle_pct), 'latin-1' ) )                
+
+                self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, command )
 
 #
 #
