@@ -64,6 +64,7 @@ The package implements:
      - reading Button  
      - reading Tilt (Basic Mode)  
      - controlling Interactive motors (timed and angle)  
+     - controlling WeDo Motors (just dutycycle) - works also with old 9V and PF 1.0 motors
 
 I've made good progress with the pygatt version and I'm almost considering this code 'beta' level,
 just need to polish it a bit and make detailed tests.
