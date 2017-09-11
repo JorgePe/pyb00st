@@ -70,6 +70,8 @@ I've made good progress with the pygatt version and I'm almost considering this 
 just need to polish it a bit and make detailed tests.
 Backporting to pygattlib version is not a priority now.
 
+** Attention **
+Methods name will change soon.
 
 ## Usage ##
 
