@@ -64,14 +64,15 @@ The package implements:
      - reading Button  
      - reading Tilt (Basic Mode)  
      - controlling Interactive motors (timed and angle)  
-     - controlling WeDo Motors (just dutycycle) - works also with old 9V and PF 1.0 motors
+     - controlling WeDo Motors (just dutycycle) - works also with old 9V and PF 1.0 motors  
+     - reading WeDo Sensor (missing some modes)
 
 I've made good progress with the pygatt version and I'm almost considering this code 'beta' level,
 just need to polish it a bit and make detailed tests.
 Backporting to pygattlib version is not a priority now.
 
-** Attention **
-Methods name will change soon.
+**Attention**
+The names of all methods will change very soon. Probaly also the names of most internal values.
 
 ## Usage ##
 
@@ -111,7 +112,6 @@ See also examples folder on source code tree.
   - check BLE connection
   - disconnect
   - read tilt in full mode
-  - WeDo sensors (tilt and distance)
 - Improve all methods
 - Keep learning python :)
 - Exception handling, multithreading and all that black magic
