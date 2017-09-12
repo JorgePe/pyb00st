@@ -14,7 +14,7 @@ from pyb00st_pygatt.constants import *
 class MoveHub:
     address = ""
 
-    # internal definitions
+    # definitions
     color_sensor_on_C = False
     color_sensor_on_D = False
 
@@ -26,7 +26,7 @@ class MoveHub:
 
     tilt_basic = True
 
-    # internal sensor values
+    # sensor values
 
     last_color_C = ''
     last_color_D = ''
@@ -43,6 +43,14 @@ class MoveHub:
     last_button = ''
 
     last_tilt = ''
+
+    last_wedo_tilt_C_roll = ''
+    last_wedo_tilt_C_pitch = ''
+    last_wedo_tilt_D_roll = ''
+    last_wedo_tilt_D_pitch = ''
+
+    last_wedo_distance_C = ''
+    last_wedo_distance_D = ''
 
 
     def __init__(self, address, controller): 
@@ -311,6 +319,7 @@ class MoveHub:
                         self.last_button = BUTTON_RELEASED
                     else :
                         self.last_button = ''
+
             # Tilt Basic Mode
             # expected: 05 00 45 3a xx
 
@@ -325,7 +334,31 @@ class MoveHub:
                         self.last_tilt = ''
                         print('Tilt: Unknown value')    
 
+            # WeDo Tilt
+            # expected: 06 00 45 port xx yy, xx = roll, yy = pitch
 
+            elif value[0] == 0x06 and \
+                value[1] == 0x00 and \
+                value[2] == 0x45 :
+
+                if value[3] == PORT_C :
+                    self. last_wedo_tilt_C_roll = int(value[4])
+                    self.last_wedo_tilt_C_pitch = int(value[5])
+                elif value[3] == PORT_D :
+                    self.last_wedo_tilt_D_roll = int(value[4])
+                    self.last_wedo_tilt_D_pitch = int(value[5])
+
+            # WeDo Distance
+            # expected: 05 00 45 port xx, xx = distance 00..0A
+
+            elif value[0] == 0x05 and \
+                value[1] == 0x00 and \
+                value[2] == 0x45 :
+
+                if value[3] == PORT_C :
+                    self.last_wedo_distance_C = int(value[4])
+                elif value[3] == PORT_D :
+                    self.last_wedo_distance_D = int(value[4])
 
     def subscribe_all(self):
         self.device.subscribe(MOVE_HUB_HARDWARE_UUID, self.parse_notifications)
@@ -399,4 +432,29 @@ class MoveHub:
             self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, LISTEN_TILT_FULL)
         self.tilt_basic = tilt_basic
 
+
+#
+# WeDo Tilt Sensor
+# - external device, can be at port C or D (probably also on both)
+# - need to find out if there are more modes
+#
+
+    def listen_wedo_tilt(self, port):
+        if port == PORT_C :
+            self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, LISTEN_WEDO_TILT_ON_C)
+        elif port == PORT_D :
+            self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, LISTEN_WEDO_TILT_ON_D)
+
+
+#
+# WeDo Distance Sensor
+# - external device, can be at port C or D (probably also on both)
+# - for now, mode is ignored, need to find out the other modes
+#
+
+    def listen_wedo_distance(self, port, distance_mode=''):
+        if port == PORT_C :
+            self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, LISTEN_WEDO_DISTANCE_ON_C)
+        elif port == PORT_D :
+            self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, LISTEN_WEDO_DISTANCE_ON_D)
 

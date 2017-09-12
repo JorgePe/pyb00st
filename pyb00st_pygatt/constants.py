@@ -84,9 +84,11 @@ MOTORS_ANGLE_END = b'\x64\x7f\x03'
 MOTOR_WEDO_INI = b'\x08\x00\x81'
 MOTOR_WEDO_MID = b'\x11\x51\x00'
 
+
 # Commands for Color Sensor
 LISTEN_COLOR_SENSOR_ON_C = b'\x0a\x00\x41\x01\x08\x01\x00\x00\x00\x01'
 LISTEN_COLOR_SENSOR_ON_D = b'\x0a\x00\x41\x02\x08\x01\x00\x00\x00\x01'
+
 
 # Sensor Colors:
 COLOR_SENSOR_COLORS = ['BLACK','','','BLUE','','GREEN','','YELLOW','','RED','WHITE']
@@ -128,3 +130,15 @@ TILT_INVERT = 0x05
 
 TILT_BASIC_VALUES = [TILT_HORIZ, TILT_UP, TILT_DOWN, TILT_RIGHT, TILT_LEFT, TILT_INVERT]
 TILT_BASIC_TEXT = ['TILT_HORIZ', 'TILT_UP', 'TILT_DOWN', 'TILT_RIGHT', 'TILT_LEFT', 'TILT_INVERT']
+
+
+# Commands for WeDo Tilt Sensor
+# There ARE more modes, use just this one for now
+LISTEN_WEDO_TILT_ON_C = b'\x0a\x00\x41\x01\x00\x01\x00\x00\x00\x01'
+LISTEN_WEDO_TILT_ON_D = b'\x0a\x00\x41\x02\x00\x01\x00\x00\x00\x01'
+
+# Commands for WeDo Distance Sensor
+# There MIGHT be more modes, use just this one for now
+LISTEN_WEDO_DISTANCE_ON_C = b'\x0a\x00\x41\x01\x00\x01\x00\x00\x00\x01'
+LISTEN_WEDO_DISTANCE_ON_D = b'\x0a\x00\x41\x02\x00\x01\x00\x00\x00\x01'
+
