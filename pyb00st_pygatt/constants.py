@@ -132,13 +132,19 @@ TILT_BASIC_VALUES = [TILT_HORIZ, TILT_UP, TILT_DOWN, TILT_RIGHT, TILT_LEFT, TILT
 TILT_BASIC_TEXT = ['TILT_HORIZ', 'TILT_UP', 'TILT_DOWN', 'TILT_RIGHT', 'TILT_LEFT', 'TILT_INVERT']
 
 
-# Commands for WeDo Tilt Sensor
-# There ARE more modes, use just this one for now
+# Commands for WeDo 2.0 Tilt Sensor
+# modes: 0 = angle, 1 = tilt, 2 = crash like WeDo 2.0 3 = some variation of angle
+# just using mode 0=angle for now
 LISTEN_WEDO_TILT_ON_C = b'\x0a\x00\x41\x01\x00\x01\x00\x00\x00\x01'
 LISTEN_WEDO_TILT_ON_D = b'\x0a\x00\x41\x02\x00\x01\x00\x00\x00\x01'
 
-# Commands for WeDo Distance Sensor
-# There MIGHT be more modes, use just this one for now
+# Commands for WeDo 2.0 Distance Sensor
+# modes:
+# 0 = distance 00..0A
+# 1 = increments when blocked
+# 2 = distance and luminosity ?
+# all continuous reading
+# just using mode 0=distance
 LISTEN_WEDO_DISTANCE_ON_C = b'\x0a\x00\x41\x01\x00\x01\x00\x00\x00\x01'
 LISTEN_WEDO_DISTANCE_ON_D = b'\x0a\x00\x41\x02\x00\x01\x00\x00\x00\x01'
 
