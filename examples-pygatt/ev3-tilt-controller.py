@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+# video showing the script in action: https://youtu.be/45pMUXGK3wc
+
 from pyb00st_pygatt.movehub import MoveHub
 from pyb00st_pygatt.constants import *
 import ev3dev.ev3 as ev3
