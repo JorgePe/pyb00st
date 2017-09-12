@@ -1,4 +1,4 @@
-#Using pyb00st (pygatt version) with LEGO MINDSTORMS EV3
+# Using pyb00st (pygatt version) with LEGO MINDSTORMS EV3
 
 You need to run ev3dev (Debian Linux for MINDSTORMS EV3)
 
