@@ -11,6 +11,7 @@ PORT_A = 0x37
 PORT_B = 0x38
 PORT_C = 0x01
 PORT_D = 0x02
+PORT_TILT = 0x3A
 
 # Commands for setting RGB LED color
 SET_LED_OFF = b'\x08\x00\x81\x32\x11\x51\x00\x00'
@@ -84,41 +85,57 @@ MOTORS_ANGLE_END = b'\x64\x7f\x03'
 MOTOR_WEDO_INI = b'\x08\x00\x81'
 MOTOR_WEDO_MID = b'\x11\x51\x00'
 
-#
-# To do: merge most LISTEN_ commands with a function
-#
 
-# Commands for Color Sensor
-LISTEN_COLOR_SENSOR_ON_C = b'\x0a\x00\x41\x01\x08\x01\x00\x00\x00\x01'
-LISTEN_COLOR_SENSOR_ON_D = b'\x0a\x00\x41\x02\x08\x01\x00\x00\x00\x01'
+# Commands that Initialize sensors in certain Modes
+
+LISTEN_INI = b'\x0a\x00\x41'
+LISTEN_END = b'\x01\x00\x00\x00\x01'
+LISTEN_BUTTON = b'\x05\x00\x01\x02\x02'
+
+MODE_COLORDIST_SENSOR = b'\x08'
+MODE_ENCODER = b'\x02'
+MODE_TILT_BASIC = b'\x02'
+MODE_TILT_FULL = b'\x00'
+
+# WeDo 2.0 Tilt Sensor modes:
+# 0 = angle
+# 1 = tilt
+# 2 = crash
+# 3 = some variation of angle
+# modes 0,1,2 like WeDo 2.0 modes
+
+MODE_WEDOTILT_ANGLE = b'\x00'
+MODE_WEDOTILT_TILT = b'\x01'
+MODE_WEDOTILT_CRASH = b'\x02'
+MODE_WEDODIST_DISTANCE = b'\x00'
+
+# WeDo 2.0 Distance Sensor modes:
+# 0 = distance 00..0A
+# 1 = increments when blocked
+# 2 = distance and luminosity ?
+# all continuous reading
+# just using mode 0=distance
+
+MODE_WEDODIST_1 = b'\x01'
+MODE_WEDODIST_2 = b'\x02'
+
+#
+# Constants:
+#
 
 # Sensor Colors:
 COLOR_SENSOR_COLORS = ['BLACK', '', '', 'BLUE', '', 'GREEN', '', 'YELLOW', '', 'RED', 'WHITE']
 
-# Commands for Distance Sensor
-LISTEN_DIST_SENSOR_ON_C = b'\x0a\x00\x41\x01\x08\x01\x00\x00\x00\x01'
-LISTEN_DIST_SENSOR_ON_D = b'\x0a\x00\x41\x02\x08\x01\x00\x00\x00\x01'
-
-# Commands for Reading Encoders
-
-LISTEN_ENCODER_ON_A = b'\x0a\x00\x41\x37\x02\x01\x00\x00\x00\x01'
-LISTEN_ENCODER_ON_B = b'\x0a\x00\x41\x38\x02\x01\x00\x00\x00\x01'
-LISTEN_ENCODER_ON_C = b'\x0a\x00\x41\x01\x02\x01\x00\x00\x00\x01'
-LISTEN_ENCODER_ON_D = b'\x0a\x00\x41\x02\x02\x01\x00\x00\x00\x01'
-
-# 
+# Encoder
 ENCODER_MID = 2147483648
 ENCODER_MAX = 4294967296
 
-# Commands for Reading Button
-LISTEN_BUTTON = b'\x05\x00\x01\x02\x02'
+# Button
 
 BUTTON_PRESSED = '\x01'
 BUTTON_RELEASED = '\x00'
 
-# Commands and Modes for BOOST Tilt Sensor
-LISTEN_TILT_BASIC = b'\x0a\x00\x41\x3a\x02\x01\x00\x00\x00\x01'
-LISTEN_TILT_FULL = b'\x0a\x00\x41\x3a\x00\x01\x00\x00\x00\x01'
+# BOOST Tilt Sensor
 
 TILT_HORIZ = 0x00
 TILT_UP = 0x01
@@ -130,42 +147,10 @@ TILT_INVERT = 0x05
 TILT_BASIC_VALUES = [TILT_HORIZ, TILT_UP, TILT_DOWN, TILT_RIGHT, TILT_LEFT, TILT_INVERT]
 TILT_BASIC_TEXT = ['TILT_HORIZ', 'TILT_UP', 'TILT_DOWN', 'TILT_RIGHT', 'TILT_LEFT', 'TILT_INVERT']
 
-# Commands and Modes for WeDo 2.0 Tilt Sensor
-# modes:
-# 0 = angle
-# 1 = tilt
-# 2 = crash
-# 3 = some variation of angle
-# modes 0,1,2 like WeDo 2.0 modes
-LISTEN_WEDO_TILT_ON_C_MODE_ANGLE = b'\x0a\x00\x41\x01\x00\x01\x00\x00\x00\x01'
-LISTEN_WEDO_TILT_ON_D_MODE_ANGLE = b'\x0a\x00\x41\x02\x00\x01\x00\x00\x00\x01'
-LISTEN_WEDO_TILT_ON_C_MODE_TILT = b'\x0a\x00\x41\x01\x01\x01\x00\x00\x00\x01'
-LISTEN_WEDO_TILT_ON_D_MODE_TILT = b'\x0a\x00\x41\x02\x01\x01\x00\x00\x00\x01'
-LISTEN_WEDO_TILT_ON_C_MODE_CRASH = b'\x0a\x00\x41\x01\x02\x01\x00\x00\x00\x01'
-LISTEN_WEDO_TILT_ON_D_MODE_CRASH = b'\x0a\x00\x41\x02\x02\x01\x00\x00\x00\x01'
-
-WEDO_TILT_MODE_ANGLE = 0x00
-WEDO_TILT_MODE_TILT = 0x01
-WEDO_TILT_MODE_CRASH = 0x02
+# WeDo 2.0 Tilt Sensor
 
 WEDO_TILT_HORIZ = 0x00
 WEDO_TILT_LEFT = 0x07
 WEDO_TILT_RIGHT = 0x05
 WEDO_TILT_UP = 0x03
 WEDO_TILT_DOWN = 0x09
-
-# Commands for WeDo 2.0 Distance Sensor
-# modes:
-# 0 = distance 00..0A
-# 1 = increments when blocked
-# 2 = distance and luminosity ?
-# all continuous reading
-# just using mode 0=distance
-LISTEN_WEDO_DISTANCE_ON_C_MODE_DIST = b'\x0a\x00\x41\x01\x00\x01\x00\x00\x00\x01'
-LISTEN_WEDO_DISTANCE_ON_D_MODE_DIST = b'\x0a\x00\x41\x02\x00\x01\x00\x00\x00\x01'
-LISTEN_WEDO_DISTANCE_ON_C_MODE_1 = b'\x0a\x00\x41\x01\x01\x01\x00\x00\x00\x01'
-LISTEN_WEDO_DISTANCE_ON_D_MODE_1 = b'\x0a\x00\x41\x02\x01\x01\x00\x00\x00\x01'
-LISTEN_WEDO_DISTANCE_ON_C_MODE_2 = b'\x0a\x00\x41\x01\x02\x01\x00\x00\x00\x01'
-LISTEN_WEDO_DISTANCE_ON_D_MODE_2 = b'\x0a\x00\x41\x02\x02\x01\x00\x00\x00\x01'
-
-WEDO_DISTANCE_MODE_DIST = 0x00

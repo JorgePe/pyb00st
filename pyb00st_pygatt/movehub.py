@@ -72,7 +72,7 @@ class MoveHub:
         self.adapter = pygatt.GATTToolBackend(hci_device=controller)
         self.adapter.start()
 
- # connect - missing disconnect method
+# connect - missing disconnect method
         self.device = self.adapter.connect(self.address)
 
     def is_connected(self):
@@ -83,7 +83,6 @@ class MoveHub:
         return self.address
 
     def getname(self):
-        self.connect()
         devicename = self.device.char_read_handle(0x07)
         return devicename.decode("utf-8")
 
@@ -395,25 +394,19 @@ class MoveHub:
 # Color Sensor
 # - external device, can be at port C or D (probably also at both)
 #
-    def listen_color_sensor(self, port):
-        if port == PORT_C:
-            self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, LISTEN_COLOR_SENSOR_ON_C)
-            self.color_sensor_on_C = True
-        elif port == PORT_D:
-            self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, LISTEN_COLOR_SENSOR_ON_D)
-            self.color_sensor_on_D = True
+    def listen_colordist_sensor(self, port):
+        if port in [PORT_C, PORT_D]:
+            command = LISTEN_INI
+            command += bytes([port])
+            command += MODE_COLORDIST_SENSOR
+            command += LISTEN_END
 
-#
-# Distance Sensor
-# - external device, can be at port C or D (probably also at both)
-#
-    def listen_distance_sensor(self, port):
-        if port == PORT_C:
-            self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, LISTEN_DIST_SENSOR_ON_C)
-            self.distance_sensor_on_C = True
-        elif port == PORT_D:
-            self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, LISTEN_DIST_SENSOR_ON_D)
-            self.distance_sensor_on_D = True
+            if port == PORT_C:
+                self.color_sensor_on_C = True
+            else:
+                self.color_sensor_on_D = True
+
+            self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, command)
 
 #
 # Encoder Sensor
@@ -422,16 +415,13 @@ class MoveHub:
 # - missing reading of port group AB
 #
     def listen_encoder_sensor(self, port):
-        if port == PORT_A:
-            self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, LISTEN_ENCODER_ON_A)
-        elif port == PORT_B:
-            self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, LISTEN_ENCODER_ON_B)
-        elif port == PORT_C:
-            self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, LISTEN_ENCODER_ON_C)
-            self.motor_encoder_on_C = True
-        elif port == PORT_D:
-            self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, LISTEN_ENCODER_ON_D)
-            self.motor_encoder_on_D = True
+        if port in [PORT_A, PORT_B, PORT_C, PORT_D]:
+            command = LISTEN_INI
+            command += bytes([port])
+            command += MODE_ENCODER
+            command += LISTEN_END
+
+            self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, command)
 #
 # Button Sensor
 # - internal device, reacts to PRESS and DEPRESS actions
@@ -448,12 +438,15 @@ class MoveHub:
 # - full mode (still missing) returns all positions, 1º resolution
 #
     def listen_tilt(self, tilt_basic):
+        command = LISTEN_INI
+        command += bytes([PORT_TILT])
         if tilt_basic:
-            self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, LISTEN_TILT_BASIC)
+            command += MODE_TILT_BASIC
         else:
-            self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, LISTEN_TILT_FULL)
-        self.tilt_basic = tilt_basic
+            command += MODE_TILT_FULL
+        command += LISTEN_END
 
+        self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, command)
 
 #
 # WeDo Tilt Sensor
@@ -461,44 +454,46 @@ class MoveHub:
 # - modes: angle, tilt, crash
 #
 
-    def listen_wedo_tilt(self, port, mode=WEDO_TILT_MODE_ANGLE):
+    def listen_wedo_tilt(self, port, mode=MODE_WEDOTILT_ANGLE):
         if port in [PORT_C, PORT_D] and \
-                mode in [WEDO_TILT_MODE_ANGLE, WEDO_TILT_MODE_TILT, WEDO_TILT_MODE_CRASH]:
+                mode in [MODE_WEDOTILT_ANGLE, MODE_WEDOTILT_TILT, MODE_WEDOTILT_CRASH]:
+
             self.wedo_tilt_mode = mode
+            command = LISTEN_INI
+            command += bytes([port])
+            command += mode
+            command += LISTEN_END
+
             if port == PORT_C:
-                if mode == WEDO_TILT_MODE_ANGLE:
-                    self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, LISTEN_WEDO_TILT_ON_C_MODE_ANGLE)
-                elif mode == WEDO_TILT_MODE_TILT:
-                    self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, LISTEN_WEDO_TILT_ON_C_MODE_TILT)
-                elif mode == WEDO_TILT_MODE_CRASH:
-                    self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, LISTEN_WEDO_TILT_ON_C_MODE_CRASH)
                 self.wedo_tilt_on_C = True
                 self.wedo_distance_on_C = False
             elif port == PORT_D:
-                if mode == WEDO_TILT_MODE_ANGLE:
-                    self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, LISTEN_WEDO_TILT_ON_D_MODE_ANGLE)
-                elif mode == WEDO_TILT_MODE_TILT:
-                    self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, LISTEN_WEDO_TILT_ON_D_MODE_TILT)
-                elif mode == WEDO_TILT_MODE_CRASH:
-                    self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, LISTEN_WEDO_TILT_ON_D_MODE_CRASH)
                 self.wedo_tilt_on_D = True
                 self.wedo_distance_on_D = False
 
-#
+            self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, command)
+
+        #
 # WeDo Distance Sensor
 # - external device, can be at port C or D (probably also on both)
 # - modes: distance, trigger? , luminosity?
 #
 
-    def listen_wedo_distance(self, port, mode=WEDO_DISTANCE_MODE_DIST):
+    def listen_wedo_distance(self, port, mode=MODE_WEDODIST_DISTANCE):
         if port in [PORT_C, PORT_D] and \
-                mode in [WEDO_DISTANCE_MODE_DIST]:
+                mode in [MODE_WEDODIST_DISTANCE]:
+
             self.wedo_distance_mode = mode
+            command = LISTEN_INI
+            command += bytes([port])
+            command += mode
+            command += LISTEN_END
+
             if port == PORT_C:
-                self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, LISTEN_WEDO_DISTANCE_ON_C_MODE_DIST)
                 self.wedo_distance_on_C = True
                 self.wedo_tilt_on_C = False
             elif port == PORT_D:
-                self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, LISTEN_WEDO_DISTANCE_ON_D_MODE_DIST)
                 self.wedo_distance_on_D = True
                 self.wedo_tilt_on_D = False
+
+            self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, command)
