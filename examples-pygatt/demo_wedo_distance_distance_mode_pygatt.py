@@ -10,7 +10,7 @@ MY_BTCTRLR_HCI = 'hci0'
 
 mymovehub = MoveHub(MY_MOVEHUB_ADD, MY_BTCTRLR_HCI)
 mymovehub.subscribe_all()
-mymovehub.listen_wedo_distance(PORT_D, '')
+mymovehub.listen_wedo_distance(PORT_D, WEDO_DISTANCE_MODE_DIST)
 
 while True:
     sleep(0.2)

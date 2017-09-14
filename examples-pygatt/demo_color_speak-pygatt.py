@@ -3,13 +3,13 @@
 from pyb00st_pygatt.movehub import MoveHub
 from pyb00st_pygatt.constants import *
 
-from espeak import espeak # apt install python3-espeak
+from espeak import espeak  # apt install python3-espeak
 from time import sleep
 
 MY_MOVEHUB_ADD = '00:16:53:A4:CD:7E'
 MY_BTCTRLR_HCI = 'hci0'
 
-espeak.set_voice='en'
+espeak.set_voice = 'en'
 
 mymovehub = MoveHub(MY_MOVEHUB_ADD, MY_BTCTRLR_HCI)
 mymovehub.subscribe_color()

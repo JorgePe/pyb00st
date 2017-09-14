@@ -17,4 +17,4 @@ mymovehub.listen_encoder_sensor(PORT_D)
 while True:
     sleep(0.2)
     print('Motor A: {} Motor B: {} Motor D: {}'.
-            format(mymovehub.last_encoder_A,mymovehub.last_encoder_B,mymovehub.last_encoder_D))
+          format(mymovehub.last_encoder_A, mymovehub.last_encoder_B, mymovehub.last_encoder_D))

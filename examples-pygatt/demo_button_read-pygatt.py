@@ -14,9 +14,9 @@ mymovehub.listen_button()
 
 while True:
     sleep(0.2)
-    if mymovehub.last_button == BUTTON_PRESSED :
+    if mymovehub.last_button == BUTTON_PRESSED:
         print('PRESSED')
-    elif mymovehub.last_button == BUTTON_RELEASED :
+    elif mymovehub.last_button == BUTTON_RELEASED:
         print('RELEASED')
     else:
         print('')

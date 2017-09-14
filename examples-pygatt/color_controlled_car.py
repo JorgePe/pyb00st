@@ -20,7 +20,7 @@ mymovehub.listen_color_sensor(PORT_C)
 
 while True:
     color = mymovehub.last_color_C
-    if  color in COLOR_SENSOR_COLORS :
+    if color in COLOR_SENSOR_COLORS:
         if color == 'BLUE':
             mymovehub.motors_timed(MOTOR_A, 500, -100, -100)
             sleep(0.5)
