@@ -45,8 +45,9 @@ There are two backends for pygatt:
 
 On linux, the gatttool backend approach results in slower performance than pygattlib. But it also requires
 much less dependencies... and it works with notifications!
-On Windows or OSX, you need an extra device like the BLED112, and drivers and the like. I don't have any
-non-linux system but when I've the time, I'll test it with a Windows VM.
+On Windows or OSX, you need an extra device like the BLED112, and drivers and the like. I finally got a
+BLED112 and I can confirm that changing my code to use the BGAPIBackend (just one line change) my code works
+on a Windows 10 Virtual Machine (will document it later)
 
 
 ## Status: ##
@@ -93,11 +94,6 @@ our code.
 from pyb00st import MoveHub
 
 mymovehub = MoveHub("00:16:53:A4:CD:7E", "hci0")
-if mymovehub.is_connected() == False :
-    print("No connection")
-    mymovehub.connect()
-    
-print( mymovehub.getaddress() )
 print( mymovehub.getname() )
 ```
 See also examples folder on source code tree.
