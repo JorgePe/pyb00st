@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import pygatt
-from pyb00st_pygatt.constants import *
+from pyb00st.constants import *
 
 #
 # To Do:

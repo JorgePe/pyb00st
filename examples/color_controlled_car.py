@@ -6,8 +6,8 @@
 # video: https://youtu.be/8XWXnisMeAY
 #
 
-from pyb00st_pygatt.movehub import MoveHub
-from pyb00st_pygatt.constants import *
+from pyb00st.movehub import MoveHub
+from pyb00st.constants import *
 
 from time import sleep
 

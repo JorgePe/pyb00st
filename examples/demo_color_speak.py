@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-from pyb00st_pygatt.movehub import MoveHub
-from pyb00st_pygatt.constants import *
+from pyb00st.movehub import MoveHub
+from pyb00st.constants import *
 
 from espeak import espeak  # apt install python3-espeak
 from time import sleep
