@@ -473,7 +473,7 @@ class MoveHub:
 
             self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, command)
 
-        #
+#
 # WeDo Distance Sensor
 # - external device, can be at port C or D (probably also on both)
 # - modes: distance, trigger? , luminosity?
