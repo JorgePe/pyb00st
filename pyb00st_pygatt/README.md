@@ -20,19 +20,19 @@ So until pygattlib is fixed I'm going forward with pygatt only.
 This was tested with Ubuntu 17.04 on a x64 laptop and also with ev3dev
 (ev3dev jessie, kernel 4.4.78-21-ev3dev-ev3) on LEGO MINDSTORMS EV3:
 - install dependencies:
- - sudo pip3 instal pexpect
+  - sudo pip3 instal pexpect
 - install pygatt
- - sudo pip3 install pygatt
+  - sudo pip3 install pygatt
 
 ## How to install pygatt on Windows ** ##
 
 This was tested on a Windows 10 VM:
 - install python for Windows (latest  python3 version, like 'python-3.6.2-amd64')
 - install dependencies:
- - pip3 install nose
- - pip3 install coverage
+  - pip3 install nose
+  - pip3 install coverage
 - install pygatt:
- - pip3 install pygatt
+  - pip3 install pygatt
  
  The BGAPIBackend had some problems detecting the BLED112. It is a
  [known issue](https://github.com/peplin/pygatt/issues/118) so I uninstalled pygatt and
