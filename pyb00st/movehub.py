@@ -14,14 +14,8 @@ from pyb00st.constants import *
 class MoveHub:
     address = ""
 
-#
-# should merge color and distance in one
-#
-    color_sensor_on_C = False
-    color_sensor_on_D = False
-
-    distance_sensor_on_C = False
-    distance_sensor_on_D = False
+    colordist_sensor_on_C = False
+    colordist_sensor_on_D = False
 
     motor_encoder_on_C = False
     motor_encoder_on_D = False
@@ -89,6 +83,12 @@ class MoveHub:
 
 # connect - missing disconnect method
         self.device = self.adapter.connect(self.address)
+
+    def stop(self):
+        ###############################################
+        # Should check first if there is a connection #
+        ###############################################
+        self.adapter.stop()
 
     def is_connected(self):
         # Useless - needs thinking
@@ -317,17 +317,16 @@ class MoveHub:
 
                     # Might be several things, need to know what we have on port C
 
-                    if self.color_sensor_on_C:
+                    #############################
+                    # NEED TO CHECK THIS BETTER #
+                    #############################
+                    if self.colordist_sensor_on_C:
                         if value[4] != 0xFF:
                             self.last_color_C = COLOR_SENSOR_COLORS[value[4]]
+                            self.last_distance_C = ''
                         else:
                             self.last_color_C = ''
-
-                    elif self.distance_sensor_on_C:
-                        if value[4] == 0xFF:
                             self.last_distance_C = str(value[5])
-                        else:
-                            self.last_distance_C = ''
 
                     elif self.motor_encoder_on_C:
 
@@ -339,21 +338,19 @@ class MoveHub:
 
                     # Might be several things, need to know what we have on port D
 
-                    if self.color_sensor_on_D:
+                    if self.colordist_sensor_on_D:
                         if value[4] != 0xFF:
                             self.last_color_D = COLOR_SENSOR_COLORS[value[4]]
+                            self.last_distance_D = ''
                         else:
                             self.last_color_D = ''
-
-                    elif self.distance_sensor_on_D:
-                        if value[4] == 0xFF:
                             self.last_distance_D = str(value[5])
-                        else:
-                            self.last_distance_D = ''
 
                     elif self.motor_encoder_on_D:
-
-                        self.last_encoder_D = value[4] + value[5]*256 + value[6]*65536 + value[7]*16777216
+                        self.last_encoder_D = value[4] + \
+                                value[5]*256 + \
+                                value[6]*65536 + \
+                                value[7]*16777216
                         if self.last_encoder_D > ENCODER_MID:
                             self.last_encoder_D = self.last_encoder_D - ENCODER_MAX
 
@@ -439,14 +436,19 @@ class MoveHub:
                     self.last_wedo_tilt_C_crash = [value[4], value[5], value[6]]
                 elif value[3] == PORT_D:
                     self.last_wedo_tilt_D_crash = [value[4], value[5], value[6]]
-
+#
+#
+# subscribe_all()
+#  considered doing this automatically at start but there might be some cases
+#  where it is usefull to spare resources
+#
     def subscribe_all(self):
         self.device.subscribe(MOVE_HUB_HARDWARE_UUID, self.parse_notifications)
 
 #
 #
 # Methods that activate sensors
-# (no method for deactivate yet)
+# (no methods for deactivate yet)
 #
 #
 
@@ -462,9 +464,9 @@ class MoveHub:
             command += LISTEN_END
 
             if port == PORT_C:
-                self.color_sensor_on_C = True
+                self.colordist_sensor_on_C = True
             else:
-                self.color_sensor_on_D = True
+                self.colordist_sensor_on_D = True
 
             self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, command)
 

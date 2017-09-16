@@ -11,11 +11,11 @@ MY_BTCTRLR_HCI = 'hci0'
 try:
     mymovehub = MoveHub(MY_MOVEHUB_ADD, MY_BTCTRLR_HCI)
     mymovehub.subscribe_all()
-    mymovehub.listen_encoder_sensor(PORT_D)
     mymovehub.listen_colordist_sensor(PORT_C)
 
     while True:
         sleep(0.2)
-        print('Motor D: {} Color: {}'.format(mymovehub.last_encoder_D, mymovehub.last_color_C))
+        print('Color: {} Distance: {}'.format(mymovehub.last_color_C, mymovehub.last_distance_C))
+
 finally:
     mymovehub.stop()

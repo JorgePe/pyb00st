@@ -12,18 +12,21 @@ mymovehub = MoveHub(MY_MOVEHUB_ADD, MY_BTCTRLR_HCI)
 mymovehub.subscribe_all()
 mymovehub.listen_wedo_tilt(PORT_C, WEDO_TILT_MODE_TILT)
 
-while True:
-    sleep(0.2)
-    tilt = mymovehub.last_wedo_tilt_C_tilt
-    if tilt == WEDO_TILT_HORIZ:
-        print('HORIZ')
-    elif tilt == WEDO_TILT_LEFT:
-        print('LEFT')
-    elif tilt == WEDO_TILT_RIGHT:
-        print('RIGHT')
-    elif tilt == WEDO_TILT_UP:
-        print('UP')
-    elif tilt == WEDO_TILT_DOWN:
-        print('DOWN')
+try:
+    while True:
+        sleep(0.2)
+        tilt = mymovehub.last_wedo_tilt_C_tilt
+        if tilt == WEDO_TILT_HORIZ:
+            print('HORIZ')
+        elif tilt == WEDO_TILT_LEFT:
+            print('LEFT')
+        elif tilt == WEDO_TILT_RIGHT:
+            print('RIGHT')
+        elif tilt == WEDO_TILT_UP:
+            print('UP')
+        elif tilt == WEDO_TILT_DOWN:
+            print('DOWN')
 
+finally:
+    mymovehub.stop()
 
