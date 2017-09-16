@@ -22,15 +22,15 @@ while True:
     color = mymovehub.last_color_C
     if color in COLOR_SENSOR_COLORS:
         if color == 'BLUE':
-            mymovehub.motors_timed(MOTOR_A, 500, -100, -100)
+            mymovehub.run_motors_for_time(MOTOR_A, 500, -100, -100)
             sleep(0.5)
         elif color == 'WHITE':
-            mymovehub.motor_timed(MOTOR_A, 500, -100)
+            mymovehub.run_motor_for_time(MOTOR_A, 500, -100)
             sleep(0.5)
         elif color == 'YELLOW':
-            mymovehub.motor_timed(MOTOR_B, 500, -100)
+            mymovehub.run_motor_for_time(MOTOR_B, 500, -100)
             sleep(0.5)
         elif color == 'RED':
-            mymovehub.motors_timed(MOTOR_AB, 500, 100, 100)
+            mymovehub.run_motors_for_time(MOTOR_AB, 500, 100, 100)
             sleep(0.5)
 

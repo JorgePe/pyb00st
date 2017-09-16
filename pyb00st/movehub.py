@@ -14,6 +14,9 @@ from pyb00st.constants import *
 class MoveHub:
     address = ""
 
+#
+# should merge color and distance in one
+#
     color_sensor_on_C = False
     color_sensor_on_D = False
 
@@ -31,6 +34,8 @@ class MoveHub:
     last_distance_C = ''
     last_distance_D = ''
 
+# should rename this to
+# last_position
     last_encoder_A = ''
     last_encoder_B = ''
     last_encoder_C = ''
@@ -40,6 +45,9 @@ class MoveHub:
     last_button = ''
 
     last_tilt = ''
+
+# LEGO uses "orientation" instead of "tilt"
+# and AngleX, AngleY instead of roll, pitch
 
     last_wedo_tilt_C_roll = ''
     last_wedo_tilt_C_pitch = ''
@@ -60,6 +68,13 @@ class MoveHub:
     wedo_distance_mode = ''
     wedo_distance_on_C = False
     wedo_distance_on_D = False
+
+#
+# Still Missing:
+# - Ambient Light Level
+# - motor speed
+# - motors speed (not sure if exists)
+#
 
     def __init__(self, address, controller): 
         self.address = address
@@ -88,24 +103,32 @@ class MoveHub:
 
 #
 #
-# set_led_color()
+# set_led_color() -> set_hub_light(color)
 #  accepts one of the 10 colors (plus Off) defined in constants.py
 #
 #
-    def set_led_color(self, color):
+    def set_hub_light(self, color):
         if color in LED_COLORS:
             self.device.write_handle(MOVE_HUB_HARDWARE_HANDLE, SET_LED_COLOR[LED_COLORS.index(color)])
 
+
 #
 #
-# motor_timed()
-# motors_timed()
+# Still Missing:
+# - set_sensor_light(color)
+#
+#
+
+#
+#
+# motor_timed() -> run_motor_for_time(time,speed)
+# motors_timed() -> run_motors_for_time(time,speed)
 #  accepts a motor (defined in constants.py), a time in milliseconds and a dutycycle in percentage
 #  to change direction use negative dutycycle
 #  should find a way to merge the 2 methods, later on
 #
 #
-    def motor_timed(self, motor, time_ms, dutycycle_pct):
+    def run_motor_for_time(self, motor, time_ms, dutycycle_pct):
         if motor in MOTORS:
             if dutycycle_pct in range(-100, 101):
                 command = MOTOR_TIMED_INI
@@ -120,7 +143,12 @@ class MoveHub:
 
                 self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, command)
 
-    def motors_timed(self, motor, time_ms, dutycycle_pct_a, dutycycle_pct_b):
+#
+# note:
+# doesn't make sense to specify 'motor' since only one value exists
+#
+
+    def run_motors_for_time(self, motor, time_ms, dutycycle_pct_a, dutycycle_pct_b):
         if motor in MOTOR_PAIRS:
             if dutycycle_pct_a in range(-100, 101) and dutycycle_pct_b in range(-100, 101):
                 command = MOTORS_TIMED_INI
@@ -140,14 +168,14 @@ class MoveHub:
 
 #
 #
-# motor_angle()
-# motors_angle()
+# motor_angle() -> run_motor_for_angle(angle,speed)
+# motors_angle() -> run_motors_for_angle(angle,speed)
 #  accepts a motor (defined in constants.py), an angle in degrees and a dutycycle in percentage
 #  to change direction use negative dutycycle
 #  should find a way to merge the 2 methods, later on
 #
 #
-    def motor_angle(self, motor, angle, dutycycle_pct):
+    def run_motor_for_angle(self, motor, angle, dutycycle_pct):
         if motor in MOTORS:
             if dutycycle_pct in range(-100, 101):
                 command = MOTOR_ANGLE_INI
@@ -162,7 +190,12 @@ class MoveHub:
 
                 self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, command)
 
-    def motors_angle(self, motor, angle, dutycycle_pct_a, dutycycle_pct_b):
+#
+# note:
+# doesn't make sense to specify 'motor' since only one value exists
+#
+
+    def run_motors_for_angle(self, motor, angle, dutycycle_pct_a, dutycycle_pct_b):
         if motor in MOTORS:
             if dutycycle_pct_a in range(-100, 101) and dutycycle_pct_b in range(-100, 101):
                 command = MOTORS_ANGLE_INI
@@ -182,7 +215,26 @@ class MoveHub:
 
 #
 #
-# motor_wedo()
+# Still Missing:
+# - steer_motors_for_time(time,speed)
+# - steer_motors_for_angle(steer,angle,speed)
+#
+#
+
+
+#
+#
+# Still Missing:
+# - motor(speed)
+# - motors(speed)
+# - steer(steer,speed)
+# should do the same as motor_wedo(speed) for the Interactive Motors 
+# i.e. turn on
+#
+
+#
+#
+# motor_wedo(speed)
 # - external device, can be at port C or D or both
 #  accepts a port and a dutycycle in percentage
 #  to change direction use negative dutycycle
@@ -201,6 +253,14 @@ class MoveHub:
                 command += bytes(bytes(chr(dutycycle_pct), 'latin-1'))
 
                 self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, command)
+
+#
+#
+# Still Missing:
+# - ResetMotorPosition(angle)
+# - ResetMotorsPosition(angle)
+#
+#
 
 #
 #
@@ -497,3 +557,5 @@ class MoveHub:
                 self.wedo_tilt_on_D = False
 
             self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, command)
+
+
