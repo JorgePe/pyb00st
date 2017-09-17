@@ -13,15 +13,12 @@ mymovehub = MoveHub(MY_MOVEHUB_ADD, MY_BTCTRLR_HCI)
 try:
     mymovehub.start()
     mymovehub.subscribe_all()
-    mymovehub.listen_button()
+    mymovehub.listen_hubtilt(MODE_HUBTILT_BASIC)
 
     while True:
-        sleep(0.2)
-        if mymovehub.last_button == BUTTON_PRESSED:
-            print('PRESSED')
-        elif mymovehub.last_button == BUTTON_RELEASED:
-            print('RELEASED')
-        else:
-            print('')
+        print('Is connected: ', mymovehub.is_connected())
+        sleep(1)
+
 finally:
     mymovehub.stop()
+

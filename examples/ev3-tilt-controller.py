@@ -14,10 +14,10 @@ m2 = ev3.LargeMotor('outB')
 
 mymovehub = MoveHub(MY_MOVEHUB_ADD, MY_BTCTRLR_HCI)
 mymovehub.subscribe_all()
-mymovehub.listen_tilt(tilt_basic=True)
+mymovehub.listen_hubtilt(MODE_HUBTILT_BASIC)
 
 while True:
-    tilt = mymovehub.last_tilt
+    tilt = mymovehub.last_hubtilt
     if tilt in TILT_BASIC_VALUES:
         if tilt == TILT_HORIZ:
             pass

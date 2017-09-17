@@ -13,18 +13,13 @@ from pyb00st.constants import *
 
 class MoveHub:
     address = ""
+    device = object
 
-    colordist_sensor_on_C = False
-    colordist_sensor_on_D = False
-
-    motor_encoder_on_C = False
-    motor_encoder_on_D = False
-
-    tilt_basic = True
+    _port_C_is = TYPE_NONE
+    _port_D_is = TYPE_NONE
 
     last_color_C = ''
     last_color_D = ''
-
     last_distance_C = ''
     last_distance_D = ''
 
@@ -37,10 +32,9 @@ class MoveHub:
     last_encoder_AB = ''
 
     last_button = ''
+    last_hubtilt = ''
 
-    last_tilt = ''
-
-# LEGO uses "orientation" instead of "tilt"
+# LEGO App uses "orientation" instead of "tilt"
 # and AngleX, AngleY instead of roll, pitch
 
     last_wedo_tilt_C_roll = ''
@@ -55,16 +49,16 @@ class MoveHub:
     last_wedo_distance_C = ''
     last_wedo_distance_D = ''
 
-    wedo_tilt_mode = ''
-    wedo_tilt_on_C = False
-    wedo_tilt_on_D = False
+# Modes
 
-    wedo_distance_mode = ''
-    wedo_distance_on_C = False
-    wedo_distance_on_D = False
+    mode_wedo_tilt = ''
+    mode_wedo_distance = ''
+#    mode_hubtilt = MODE_HUBTILT_BASIC   # not sure if it is needed
+
 
 #
 # Still Missing:
+# - Hub Tilt Full Mode
 # - Ambient Light Level
 # - motor speed
 # - motors speed (not sure if exists)
@@ -79,20 +73,19 @@ class MoveHub:
 # hci_device='hci0', gatttool_logfile=None,cli_options=None
 #
         self.adapter = pygatt.GATTToolBackend(hci_device=controller)
-        self.adapter.start()
 
-# connect - missing disconnect method
+    def start(self):
+        self.adapter.start()
         self.device = self.adapter.connect(self.address)
 
     def stop(self):
-        ###############################################
-        # Should check first if there is a connection #
-        ###############################################
         self.adapter.stop()
 
     def is_connected(self):
-        # Useless - needs thinking
-        return True
+        # not sure about this - GATToolBacked returns True if the
+        # process is running so if we power off the Move Hub it
+        # keeps returning True 
+        return self.adapter._con.isalive()
 
     def getaddress(self):
         return self.address
@@ -317,10 +310,7 @@ class MoveHub:
 
                     # Might be several things, need to know what we have on port C
 
-                    #############################
-                    # NEED TO CHECK THIS BETTER #
-                    #############################
-                    if self.colordist_sensor_on_C:
+                    if self._port_C_is == TYPE_COLORDIST:
                         if value[4] != 0xFF:
                             self.last_color_C = COLOR_SENSOR_COLORS[value[4]]
                             self.last_distance_C = ''
@@ -328,7 +318,7 @@ class MoveHub:
                             self.last_color_C = ''
                             self.last_distance_C = str(value[5])
 
-                    elif self.motor_encoder_on_C:
+                    elif self._port_C_is == TYPE_IMOTOR:
 
                         self.last_encoder_C = value[4] + value[5]*256 + value[6]*65536 + value[7]*16777216
                         if self.last_encoder_C > ENCODER_MID:
@@ -338,7 +328,7 @@ class MoveHub:
 
                     # Might be several things, need to know what we have on port D
 
-                    if self.colordist_sensor_on_D:
+                    if self._port_D_is == TYPE_COLORDIST:
                         if value[4] != 0xFF:
                             self.last_color_D = COLOR_SENSOR_COLORS[value[4]]
                             self.last_distance_D = ''
@@ -346,7 +336,7 @@ class MoveHub:
                             self.last_color_D = ''
                             self.last_distance_D = str(value[5])
 
-                    elif self.motor_encoder_on_D:
+                    elif self._port_D_is == TYPE_IMOTOR:
                         self.last_encoder_D = value[4] + \
                                 value[5]*256 + \
                                 value[6]*65536 + \
@@ -375,7 +365,7 @@ class MoveHub:
                 else:
                     self.last_button = ''
 
-            # Tilt Basic Mode
+            # Hub Tilt Basic Mode
             # expected: 05 00 45 3a xx
 
             elif value[0] == 0x05 and \
@@ -384,9 +374,9 @@ class MoveHub:
                     value[3] == 0x3a:
 
                 if value[4] in TILT_BASIC_VALUES:
-                    self.last_tilt = value[4]
+                    self.last_hubtilt = value[4]
                 else:
-                    self.last_tilt = ''
+                    self.last_hubtilt = ''
                     print('Tilt: Unknown value')    
 
             # WeDo Tilt, Angle Mode
@@ -414,15 +404,15 @@ class MoveHub:
                     value[2] == 0x45:
 
                 if value[3] == PORT_C:
-                    if self.wedo_tilt_on_C:
+                    if self._port_C_is == TYPE_WEDOTILT:
                         self.last_wedo_tilt_C_tilt = int(value[4])
-                    elif self.wedo_distance_on_C:
+                    elif self._port_D_is == TYPE_WEDODIST:
                         self.last_wedo_distance_C = int(value[4])
 
                 elif value[3] == PORT_D:
-                    if self.wedo_tilt_on_D:
+                    if self._port_D_is == TYPE_WEDOTILT:
                         self.last_wedo_tilt_D_tilt = int(value[4])
-                    elif self.wedo_distance_on_D:
+                    elif self._port_D_is == TYPE_WEDODIST:
                         self.last_wedo_distance_D = int(value[4])
 
             # WeDo Tilt, Crash Mode
@@ -442,6 +432,7 @@ class MoveHub:
 #  considered doing this automatically at start but there might be some cases
 #  where it is usefull to spare resources
 #
+
     def subscribe_all(self):
         self.device.subscribe(MOVE_HUB_HARDWARE_UUID, self.parse_notifications)
 
@@ -464,9 +455,9 @@ class MoveHub:
             command += LISTEN_END
 
             if port == PORT_C:
-                self.colordist_sensor_on_C = True
+                self._port_C_is = TYPE_COLORDIST
             else:
-                self.colordist_sensor_on_D = True
+                self._port_D_is = TYPE_COLORDIST
 
             self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, command)
 
@@ -483,6 +474,11 @@ class MoveHub:
             command += MODE_ENCODER
             command += LISTEN_END
 
+            if port == PORT_C:
+                self._port_C_is = TYPE_IMOTOR
+            elif port == PORT_D:
+                self._port_D_is = TYPE_IMOTOR
+
             self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, command)
 #
 # Button Sensor
@@ -493,22 +489,21 @@ class MoveHub:
         self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, LISTEN_BUTTON)
 
 #
-# Tilt Sensor
+# Hub Tilt Sensor
 # - internal device, reacts to pitch and roll (but not yaw, at least with current firmware)
 # - at least two modes: basic and full
 # - basic mode returns only to 6 extreme 90º positions defined at constants.py 
 # - full mode (still missing) returns all positions, 1º resolution
 #
-    def listen_tilt(self, tilt_basic):
-        command = LISTEN_INI
-        command += bytes([PORT_TILT])
-        if tilt_basic:
-            command += MODE_TILT_BASIC
-        else:
-            command += MODE_TILT_FULL
-        command += LISTEN_END
+    def listen_hubtilt(self, mode):
+        if mode in [MODE_HUBTILT_BASIC, MODE_HUBTILT_FULL]:
+            command = LISTEN_INI
+            command += bytes([PORT_TILT])
+            command += mode
+            command += LISTEN_END
 
-        self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, command)
+#            mode_hubtilt = mode
+            self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, command)
 
 #
 # WeDo Tilt Sensor
@@ -520,18 +515,16 @@ class MoveHub:
         if port in [PORT_C, PORT_D] and \
                 mode in [MODE_WEDOTILT_ANGLE, MODE_WEDOTILT_TILT, MODE_WEDOTILT_CRASH]:
 
-            self.wedo_tilt_mode = mode
+            self.mode_wedo_tilt = mode
             command = LISTEN_INI
             command += bytes([port])
             command += mode
             command += LISTEN_END
 
             if port == PORT_C:
-                self.wedo_tilt_on_C = True
-                self.wedo_distance_on_C = False
+                self._port_C_is = TYPE_WEDOTILT
             elif port == PORT_D:
-                self.wedo_tilt_on_D = True
-                self.wedo_distance_on_D = False
+                self. _port_D_is = TYPE_WEDOTILT
 
             self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, command)
 
@@ -545,18 +538,16 @@ class MoveHub:
         if port in [PORT_C, PORT_D] and \
                 mode in [MODE_WEDODIST_DISTANCE]:
 
-            self.wedo_distance_mode = mode
+            self.mode_wedo_distance = mode
             command = LISTEN_INI
             command += bytes([port])
             command += mode
             command += LISTEN_END
 
             if port == PORT_C:
-                self.wedo_distance_on_C = True
-                self.wedo_tilt_on_C = False
+                self._port_C_is = TYPE_WEDODIST
             elif port == PORT_D:
-                self.wedo_distance_on_D = True
-                self.wedo_tilt_on_D = False
+                self._port_D_is = TYPE_WEDODIST
 
             self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, command)
 

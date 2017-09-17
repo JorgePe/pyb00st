@@ -11,8 +11,10 @@ MY_BTCTRLR_HCI = 'hci0'
 
 espeak.set_voice = 'en'
 
+mymovehub = MoveHub(MY_MOVEHUB_ADD, MY_BTCTRLR_HCI)
+
 try:
-    mymovehub = MoveHub(MY_MOVEHUB_ADD, MY_BTCTRLR_HCI)
+    mymovehub.start()
     mymovehub.subscribe_all()
     mymovehub.listen_colordist_sensor(PORT_C)
 

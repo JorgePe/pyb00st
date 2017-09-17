@@ -10,7 +10,7 @@ MY_BTCTRLR_HCI = 'hci0'
 
 mymovehub = MoveHub(MY_MOVEHUB_ADD, MY_BTCTRLR_HCI)
 mymovehub.subscribe_all()
-mymovehub.listen_wedo_tilt(PORT_C, WEDO_TILT_MODE_TILT)
+mymovehub.listen_wedo_tilt(PORT_C, MODE_WEDOTILT_TILT)
 
 try:
     while True:

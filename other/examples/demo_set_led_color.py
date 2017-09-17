@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-from pyb00st import MoveHub
-from pyb00st.constants import *
+from other.pyboost.movehub import MoveHub
+from other.pyboost.constants import *
 from time import sleep
 
 mymovehub = MoveHub("00:16:53:A4:CD:7E", "hci0")

@@ -2,14 +2,13 @@
 
 from gattlib import GATTRequester
 import sys
-from constants import *
+from .constants import *
 
 #
 # To Do:
 # - exception handling
 # - validate connection
 #
-
 
 class MoveHub:
     address = ""
@@ -60,12 +59,6 @@ class MoveHub:
                 command += bytes(bytes(chr(dutycycle_pct), 'latin-1'))
                 command += MOTOR_TIMED_END
 
-#                print("Final Command:", command)
-#                i=0
-#                for x in command:
-#                    print( i, x )
-#                    i+=1
-
                 self.req.write_by_handle(HANDLE, command)
 
     def motors_timed(self, motor, time_ms, dutycycle_pct_A, dutycycle_pct_B):
@@ -83,11 +76,5 @@ class MoveHub:
                     dutycycle_pct_B += 255
                 command += bytes(bytes(chr(dutycycle_pct_B), 'latin-1'))
                 command += MOTORS_TIMED_END
-
-#                print("Final Command:", command)
-#                i=0
-#                for x in command:
-#                    print( i, x )
-#                    i+=1
 
                 self.req.write_by_handle(HANDLE, command)
