@@ -24,31 +24,30 @@ devices.
 
 ## Requirements ##
 
-pyb00st is intended for linux only (don't give up yet, good news ahead) and it requires BlueZ with BLE
+Inititally, pyb00st was intended for linux only (don't give up yet, good news ahead) because it requires BlueZ with BLE
 support so a recent version of linux is required.
 
 Since I want to use it with ev3dev it also needs python3.
 
 And, of course, a BLE controller is also required.
  
-Currently there are two versions of pyb00st:
-- pyb00st based on pygattlib
-- pyb00st based on pygatt
-
 I started this project with pygattlib. It's a library that makes direct use of BlueZ and has been included
 in pybluez. But since python3 version of pygattlib has problems with notifications I started to use
 a different library, pygatt, that doesn't make direct use of Bluez - instead, it makes use of a *backend*.
 
 There are two backends for pygatt:
-- on linux, a gatttool backend makes system calls to BlueZ' gatttool
+- on linux, a gatttool backend makes system calls to BlueZ's gatttool
 - on Windows and OSX, a BlueGiga backend uses the BLE stack on a BlueGiga controller like the BLED112
 
 On linux, the gatttool backend approach results in slower performance than pygattlib. But it also requires
-much less dependencies... and it works with notifications!
-On Windows or OSX, you need an extra device like the BLED112, and drivers and the like. I finally got a
-BLED112 and I can confirm that changing my code to use the BGAPIBackend (just one line change) my code works
-on a Windows 10 Virtual Machine (will document it later)
+much less dependencies... and it works with notifications on python 3!
 
+On Windows or OSX, you need an extra device like the BLED112, also drivers and the like. I finally got a
+BLED112 and I can confirm that changing my code to use the BGAPIBackend (just one line change) my code works
+on a Windows 10 Virtual Machine (by the way, Windows 10 recognizes the BLED112 so no additional drivers needed)
+
+The old version of pyb00st based on pygattlib is still available on 'other' folder but it lacks all input methods.
+If problems with nofications on python 3 gets fixed, I'll probably backport all code.
 
 ## Status: ##
 
@@ -56,21 +55,18 @@ The package implements:
    - A few constants  
    - A MoveHub class with some methods, including:    
      - controlling RGB LED color  
-     - controlling Interactive motors (just timed)  
-     
-   - The pygatt version also implements:
+     - controlling Interactive motors  (timed and angle)
      - reading Color Sensor   
      - reading Distance Sensor
      - reading Motor Encoders
      - reading Button  
-     - reading Tilt (Basic Mode)  
-     - controlling Interactive motors (timed and angle)  
-     - controlling WeDo Motors (just dutycycle) - works also with old 9V and PF 1.0 motors  
-     - reading WeDo Sensor (missing some modes)
+     - reading Tilt (Basic Mode)    
+     - controlling WeDo Motors - works also with old 9V and PF 1.0 motors  
+     - reading WeDo 2.0 Tilt Sensor  
+     - reading WeDo 2.0 Distance Sensor (missing some modes)
 
 I've made good progress with the pygatt version and I'm almost considering this code 'beta' level,
 just need to polish it a bit and make detailed tests.
-Backporting to pygattlib version is not a priority now.
 
 **Attention**
 The names of all methods will change very soon. Probaly also the names of most internal values.
@@ -96,7 +92,7 @@ from pyb00st import MoveHub
 mymovehub = MoveHub("00:16:53:A4:CD:7E", "hci0")
 print( mymovehub.getname() )
 ```
-See also examples folder on source code tree.
+See also 'examples' folder on source code tree.
 
 ## Roadmap ##
 
@@ -105,9 +101,9 @@ See also examples folder on source code tree.
   - battery (still not understood)
   - read enconder of port group A+B
   - deactivate sensors
-  - check BLE connection
-  - disconnect
+  - check BLE connection (tricky)
   - read tilt in full mode
+  - read ambient light level
 - Improve all methods
 - Keep learning python :)
 - Exception handling, multithreading and all that black magic
