@@ -10,10 +10,11 @@ I've been [reverse engineering the LEGO BOOST](https://github.com/JorgePe/BOOSTr
 
 I started this project with pygattlib. It's a library that makes direct use of BlueZ and has been
  included in pybluez. But since python3 version of pygattlib has problems with notifications I
-  started to use a different library, pygatt, that doesn't make direct use of Bluez - instead, it
-  makes use of a *backend*. On linux systems this backend can be BlueZ (through system calls to
-  BlueZ commands like hcitool and gattool) but on other systems (and probably also on linux aswell)
-  it uses a different backend, based on BlueGiga API - so a BG adapter, like BLED112, is needed
+  started to use a different library, [pygatt](https://github.com/peplin/pygatt/tree/master/pygatt),
+  that doesn't make direct use of Bluez - instead, it makes use of a *backend*. On linux systems
+  this backend can be BlueZ (through system calls to BlueZ commands like hcitool and gattool) but on
+  other systems (and probably also on linux aswell) it uses a different backend, based on BlueGiga's
+  API - so a BG adapter, like BLED112, is needed.
 
 Why did I call it pyb00st? Well, boost is a C++ library and there are already lots of python libraries
  related to it and I don't want to add the LEGO word because I don't want troubles.
