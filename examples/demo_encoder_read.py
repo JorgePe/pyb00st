@@ -17,6 +17,6 @@ try:
 
     while True:
         sleep(0.2)
-        print(mymovehub.last_encoder_C)
+        print(mymovehub.last_angle_C)
 finally:
     mymovehub.stop()

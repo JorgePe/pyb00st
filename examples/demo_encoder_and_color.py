@@ -18,6 +18,6 @@ try:
 
     while True:
         sleep(0.2)
-        print('Motor D: {} Color: {}'.format(mymovehub.last_encoder_D, mymovehub.last_color_C))
+        print('Motor D: {} Color: {}'.format(mymovehub.last_angle_D, mymovehub.last_color_C))
 finally:
     mymovehub.stop()

@@ -20,6 +20,6 @@ try:
     while True:
         sleep(0.2)
         print('Motor A: {} Motor B: {} Motor D: {}'.
-              format(mymovehub.last_encoder_A, mymovehub.last_encoder_B, mymovehub.last_encoder_D))
+              format(mymovehub.last_angle_A, mymovehub.last_angle_B, mymovehub.last_angle_D))
 finally:
     mymovehub.stop()

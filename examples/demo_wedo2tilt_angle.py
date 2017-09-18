@@ -13,11 +13,11 @@ mymovehub = MoveHub(MY_MOVEHUB_ADD, MY_BTCTRLR_HCI)
 try:
     mymovehub.start()
     mymovehub.subscribe_all()
-    mymovehub.listen_wedo_distance(PORT_D, MODE_WEDODIST_DISTANCE)
+    mymovehub.listen_wedo_tilt(PORT_C, MODE_WEDOTILT_ANGLE)
 
     while True:
         sleep(0.2)
-        print(mymovehub.last_wedo_distance_D)
-
+        print(mymovehub.last_wedo2tilt_C_roll, mymovehub.last_wedo2tilt_C_pitch)
 finally:
     mymovehub.stop()
+

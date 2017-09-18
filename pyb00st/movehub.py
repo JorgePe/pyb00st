@@ -6,9 +6,8 @@ from sys import platform
 
 #
 # To Do:
-# - create a list of devices instead of using so many variables
+# - maybe create a list of devices instead of using so many variables
 # - exception handling
-# - validate connection
 #
 
 
@@ -16,46 +15,38 @@ class MoveHub:
     address = ""
     device = object
 
+    # Internal variables to known what is on each port
     _port_C_is = TYPE_NONE
     _port_D_is = TYPE_NONE
+
+    # Last measured values of each sensor
 
     last_color_C = ''
     last_color_D = ''
     last_distance_C = ''
     last_distance_D = ''
-
-# should rename this to
-# last_position
-    last_encoder_A = ''
-    last_encoder_B = ''
-    last_encoder_C = ''
-    last_encoder_D = ''
-    last_encoder_AB = ''
-
+    last_angle_A = ''
+    last_angle_B = ''
+    last_angle_C = ''
+    last_angle_D = ''
+    last_angle_AB = ''
     last_button = ''
     last_hubtilt = ''
+    last_wedo2tilt_C_roll = ''
+    last_wedo2tilt_C_pitch = ''
+    last_wedo2tilt_D_roll = ''
+    last_wedo2tilt_D_pitch = ''
+    last_wedo2tilt_C_tilt = ''
+    last_wedo2tilt_D_tilt = ''
+    last_wedo2tilt_C_crash = ''
+    last_wedo2tilt_D_crash = ''
+    last_wedo2distance_C = ''
+    last_wedo2distance_D = ''
 
-# LEGO App uses "orientation" instead of "tilt"
-# and AngleX, AngleY instead of roll, pitch
+    # Modes
 
-    last_wedo_tilt_C_roll = ''
-    last_wedo_tilt_C_pitch = ''
-    last_wedo_tilt_D_roll = ''
-    last_wedo_tilt_D_pitch = ''
-    last_wedo_tilt_C_tilt = ''
-    last_wedo_tilt_D_tilt = ''
-    last_wedo_tilt_C_crash = ''
-    last_wedo_tilt_D_crash = ''
-
-    last_wedo_distance_C = ''
-    last_wedo_distance_D = ''
-
-# Modes
-
-    mode_wedo_tilt = ''
-    mode_wedo_distance = ''
-#    mode_hubtilt = MODE_HUBTILT_BASIC   # not sure if it is needed
-
+#    mode_wedo2tilt = ''
+#    mode_wedo2distance = ''
 
 #
 # Still Missing:
@@ -102,7 +93,7 @@ class MoveHub:
 #
 #
 # set_led_color() -> set_hub_light(color)
-#  accepts one of the 10 colors (plus Off) defined in constants.py
+#  accepts one of the 10 colors (plus OFF) defined in constants.py
 #
 #
     def set_hub_light(self, color):
@@ -143,7 +134,7 @@ class MoveHub:
 
 #
 # note:
-# doesn't make sense to specify 'motor' since only one value exists
+# doesn't make sense to specify 'motor' since only one value is possible, AB
 #
 
     def run_motors_for_time(self, motor, time_ms, dutycycle_pct_a, dutycycle_pct_b):
@@ -190,7 +181,7 @@ class MoveHub:
 
 #
 # note:
-# doesn't make sense to specify 'motor' since only one value exists
+# doesn't make sense to specify 'motor' since only one value is possible, AB
 #
 
     def run_motors_for_angle(self, motor, angle, dutycycle_pct_a, dutycycle_pct_b):
@@ -300,22 +291,22 @@ class MoveHub:
                 if value[3] == PORT_A:
                     # It's an Encoded Motor
 
-                    self.last_encoder_A = value[4] + value[5]*256 + value[6]*65536 + value[7]*16777216
-                    if self.last_encoder_A > ENCODER_MID:
-                        self.last_encoder_A = self.last_encoder_A - ENCODER_MAX
+                    self.last_angle_A = value[4] + value[5] * 256 + value[6] * 65536 + value[7] * 16777216
+                    if self.last_angle_A > ENCODER_MID:
+                        self.last_angle_A = self.last_angle_A - ENCODER_MAX
 
                 elif value[3] == PORT_B:
                     # It's an Encoded Motor
 
-                    self.last_encoder_B = value[4] + value[5]*256 + value[6]*65536 + value[7]*16777216
-                    if self.last_encoder_B > ENCODER_MID:
-                        self.last_encoder_B = self.last_encoder_B - ENCODER_MAX
+                    self.last_angle_B = value[4] + value[5] * 256 + value[6] * 65536 + value[7] * 16777216
+                    if self.last_angle_B > ENCODER_MID:
+                        self.last_angle_B = self.last_angle_B - ENCODER_MAX
 
                 elif value[3] == PORT_C:
 
                     # Might be several things, need to know what we have on port C
 
-                    if self._port_C_is == TYPE_COLORDIST:
+                    if self._port_C_is == TYPE_COLORDISTANCE:
                         if value[4] != 0xFF:
                             self.last_color_C = COLOR_SENSOR_COLORS[value[4]]
                             self.last_distance_C = ''
@@ -323,17 +314,17 @@ class MoveHub:
                             self.last_color_C = ''
                             self.last_distance_C = str(value[5])
 
-                    elif self._port_C_is == TYPE_IMOTOR:
+                    elif self._port_C_is == TYPE_ENCODERMOTOR:
 
-                        self.last_encoder_C = value[4] + value[5]*256 + value[6]*65536 + value[7]*16777216
-                        if self.last_encoder_C > ENCODER_MID:
-                            self.last_encoder_C = self.last_encoder_C - ENCODER_MAX
+                        self.last_angle_C = value[4] + value[5] * 256 + value[6] * 65536 + value[7] * 16777216
+                        if self.last_angle_C > ENCODER_MID:
+                            self.last_angle_C = self.last_angle_C - ENCODER_MAX
 
                 elif value[3] == PORT_D:
 
                     # Might be several things, need to know what we have on port D
 
-                    if self._port_D_is == TYPE_COLORDIST:
+                    if self._port_D_is == TYPE_COLORDISTANCE:
                         if value[4] != 0xFF:
                             self.last_color_D = COLOR_SENSOR_COLORS[value[4]]
                             self.last_distance_D = ''
@@ -341,13 +332,13 @@ class MoveHub:
                             self.last_color_D = ''
                             self.last_distance_D = str(value[5])
 
-                    elif self._port_D_is == TYPE_IMOTOR:
-                        self.last_encoder_D = value[4] + \
+                    elif self._port_D_is == TYPE_ENCODERMOTOR:
+                        self.last_angle_D = value[4] + \
                                 value[5]*256 + \
                                 value[6]*65536 + \
                                 value[7]*16777216
-                        if self.last_encoder_D > ENCODER_MID:
-                            self.last_encoder_D = self.last_encoder_D - ENCODER_MAX
+                        if self.last_angle_D > ENCODER_MID:
+                            self.last_angle_D = self.last_angle_D - ENCODER_MAX
 
                 elif value[3] == MOTOR_AB:
                     # It's an Encoded Motor
@@ -392,12 +383,12 @@ class MoveHub:
                     value[2] == 0x45:
 
                 if value[3] == PORT_C:
-                    self. last_wedo_tilt_C_roll = int(value[4])
-                    self.last_wedo_tilt_C_pitch = int(value[5])
+                    self. last_wedo2tilt_C_roll = int(value[4])
+                    self.last_wedo2tilt_C_pitch = int(value[5])
 
                 elif value[3] == PORT_D:
-                    self.last_wedo_tilt_D_roll = int(value[4])
-                    self.last_wedo_tilt_D_pitch = int(value[5])
+                    self.last_wedo2tilt_D_roll = int(value[4])
+                    self.last_wedo2tilt_D_pitch = int(value[5])
 
             # WeDo Tilt, Tilt Mode
             # expected: 05 00 45 port xx, xx = tilt values
@@ -409,16 +400,16 @@ class MoveHub:
                     value[2] == 0x45:
 
                 if value[3] == PORT_C:
-                    if self._port_C_is == TYPE_WEDOTILT:
-                        self.last_wedo_tilt_C_tilt = int(value[4])
-                    elif self._port_D_is == TYPE_WEDODIST:
-                        self.last_wedo_distance_C = int(value[4])
+                    if self._port_C_is == TYPE_WEDO2TILT:
+                        self.last_wedo2tilt_C_tilt = int(value[4])
+                    elif self._port_D_is == TYPE_WEDO2DISTANCE:
+                        self.last_wedo2distance_C = int(value[4])
 
                 elif value[3] == PORT_D:
-                    if self._port_D_is == TYPE_WEDOTILT:
-                        self.last_wedo_tilt_D_tilt = int(value[4])
-                    elif self._port_D_is == TYPE_WEDODIST:
-                        self.last_wedo_distance_D = int(value[4])
+                    if self._port_D_is == TYPE_WEDO2TILT:
+                        self.last_wedo2tilt_D_tilt = int(value[4])
+                    elif self._port_D_is == TYPE_WEDO2DISTANCE:
+                        self.last_wedo2distance_D = int(value[4])
 
             # WeDo Tilt, Crash Mode
             # expected: 07 00 45 port xx yy zz, these 3 bytes are incremented up to 0x64
@@ -428,9 +419,9 @@ class MoveHub:
                     value[2] == 0x45:
 
                 if value[3] == PORT_C:
-                    self.last_wedo_tilt_C_crash = [value[4], value[5], value[6]]
+                    self.last_wedo2tilt_C_crash = [value[4], value[5], value[6]]
                 elif value[3] == PORT_D:
-                    self.last_wedo_tilt_D_crash = [value[4], value[5], value[6]]
+                    self.last_wedo2tilt_D_crash = [value[4], value[5], value[6]]
 #
 #
 # subscribe_all()
@@ -460,9 +451,9 @@ class MoveHub:
             command += LISTEN_END
 
             if port == PORT_C:
-                self._port_C_is = TYPE_COLORDIST
+                self._port_C_is = TYPE_COLORDISTANCE
             else:
-                self._port_D_is = TYPE_COLORDIST
+                self._port_D_is = TYPE_COLORDISTANCE
 
             self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, command)
 
@@ -480,9 +471,9 @@ class MoveHub:
             command += LISTEN_END
 
             if port == PORT_C:
-                self._port_C_is = TYPE_IMOTOR
+                self._port_C_is = TYPE_ENCODERMOTOR
             elif port == PORT_D:
-                self._port_D_is = TYPE_IMOTOR
+                self._port_D_is = TYPE_ENCODERMOTOR
 
             self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, command)
 #
@@ -520,16 +511,16 @@ class MoveHub:
         if port in [PORT_C, PORT_D] and \
                 mode in [MODE_WEDOTILT_ANGLE, MODE_WEDOTILT_TILT, MODE_WEDOTILT_CRASH]:
 
-            self.mode_wedo_tilt = mode
+            # self.mode_wedo2tilt = mode
             command = LISTEN_INI
             command += bytes([port])
             command += mode
             command += LISTEN_END
 
             if port == PORT_C:
-                self._port_C_is = TYPE_WEDOTILT
+                self._port_C_is = TYPE_WEDO2TILT
             elif port == PORT_D:
-                self. _port_D_is = TYPE_WEDOTILT
+                self. _port_D_is = TYPE_WEDO2TILT
 
             self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, command)
 
@@ -543,17 +534,15 @@ class MoveHub:
         if port in [PORT_C, PORT_D] and \
                 mode in [MODE_WEDODIST_DISTANCE]:
 
-            self.mode_wedo_distance = mode
+            # self.mode_wedo2distance = mode
             command = LISTEN_INI
             command += bytes([port])
             command += mode
             command += LISTEN_END
 
             if port == PORT_C:
-                self._port_C_is = TYPE_WEDODIST
+                self._port_C_is = TYPE_WEDO2DISTANCE
             elif port == PORT_D:
-                self._port_D_is = TYPE_WEDODIST
+                self._port_D_is = TYPE_WEDO2DISTANCE
 
             self.device.char_write_handle(MOVE_HUB_HARDWARE_HANDLE, command)
-
-
