@@ -2,16 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9d47c631-ccc8-4730-8b55-f187eb7822ad" name="Default" comment="">
-      <change type="MOVED" beforePath="$PROJECT_DIR$/examples/demo_motor_wedo.py" afterPath="$PROJECT_DIR$/examples/demo_motor_wedo2.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/examples/demo_wedo_distance_distance_mode.py" afterPath="$PROJECT_DIR$/examples/demo_wedo2distance.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/examples/demo_wedo_tilt_angle_mode.py" afterPath="$PROJECT_DIR$/examples/demo_wedo2tilt_angle.py" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/examples/demo_wedo_tilt_tilt_mode.py" afterPath="$PROJECT_DIR$/examples/demo_wedo2tilt_tilt.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/examples/demo_encoder_and_color.py" afterPath="$PROJECT_DIR$/examples/demo_encoder_and_color.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/examples/demo_encoder_read.py" afterPath="$PROJECT_DIR$/examples/demo_encoder_read.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/examples/demo_encoder_read_x3.py" afterPath="$PROJECT_DIR$/examples/demo_encoder_read_x3.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/other/pyboost/movehub.py" afterPath="$PROJECT_DIR$/other/pyboost/movehub.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pyb00st/constants.py" afterPath="$PROJECT_DIR$/pyb00st/constants.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pyb00st/movehub.py" afterPath="$PROJECT_DIR$/pyb00st/movehub.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -33,14 +25,24 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="movehub.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="movehub.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pyb00st/movehub.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="476">
-              <caret line="432" column="29" lean-forward="false" selection-start-line="432" selection-start-column="29" selection-end-line="432" selection-end-column="29" />
+            <state relative-caret-position="307">
+              <caret line="508" column="0" lean-forward="false" selection-start-line="508" selection-start-column="0" selection-end-line="508" selection-end-column="0" />
               <folding>
                 <element signature="e#24#37#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="README.md" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="751">
+              <caret line="119" column="61" lean-forward="false" selection-start-line="119" selection-start-column="61" selection-end-line="119" selection-end-column="61" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -72,15 +74,16 @@
         <option value="$PROJECT_DIR$/examples/test.py" />
         <option value="$PROJECT_DIR$/examples/demo_tilt_read.py" />
         <option value="$PROJECT_DIR$/pyb00st/constants.py" />
-        <option value="$PROJECT_DIR$/pyb00st/movehub.py" />
         <option value="$PROJECT_DIR$/other/pyboost/movehub.py" />
         <option value="$PROJECT_DIR$/examples/demo_wedo2tilt_tilt.py" />
+        <option value="$PROJECT_DIR$/pyb00st/movehub.py" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="323" />
-    <option name="y" value="89" />
+    <option name="x" value="431" />
+    <option name="y" value="95" />
     <option name="width" value="1400" />
     <option name="height" value="1000" />
   </component>
@@ -161,7 +164,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="323" y="89" width="1400" height="1000" extended-state="0" />
+    <frame x="431" y="95" width="1400" height="1000" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.30785716" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -399,11 +402,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/pyb00st/movehub.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
-          <caret line="432" column="29" lean-forward="false" selection-start-line="432" selection-start-column="29" selection-end-line="432" selection-end-column="29" />
+        <state relative-caret-position="307">
+          <caret line="508" column="0" lean-forward="false" selection-start-line="508" selection-start-column="0" selection-end-line="508" selection-end-column="0" />
           <folding>
             <element signature="e#24#37#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="751">
+          <caret line="119" column="61" lean-forward="false" selection-start-line="119" selection-start-column="61" selection-end-line="119" selection-end-column="61" />
+          <folding />
         </state>
       </provider>
     </entry>

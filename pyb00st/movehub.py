@@ -43,11 +43,6 @@ class MoveHub:
     last_wedo2distance_C = ''
     last_wedo2distance_D = ''
 
-    # Modes
-
-#    mode_wedo2tilt = ''
-#    mode_wedo2distance = ''
-
 #
 # Still Missing:
 # - Hub Tilt Full Mode
@@ -511,7 +506,6 @@ class MoveHub:
         if port in [PORT_C, PORT_D] and \
                 mode in [MODE_WEDOTILT_ANGLE, MODE_WEDOTILT_TILT, MODE_WEDOTILT_CRASH]:
 
-            # self.mode_wedo2tilt = mode
             command = LISTEN_INI
             command += bytes([port])
             command += mode
@@ -534,7 +528,6 @@ class MoveHub:
         if port in [PORT_C, PORT_D] and \
                 mode in [MODE_WEDODIST_DISTANCE]:
 
-            # self.mode_wedo2distance = mode
             command = LISTEN_INI
             command += bytes([port])
             command += mode
