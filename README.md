@@ -78,6 +78,17 @@ The package implements:
 I've made good progress with the pygatt version and I'm almost considering this code 'beta' level,
 just need to polish it a bit and make detailed tests.
 
+
+## Installation ##
+
+pyb00st is far from being a full pyhton package that you can install with `pip`.
+
+You need to download at least the files present inside the `pyb00st` folder. If you are not familliar with git
+ just click the green "Clone or download" button and download the zip file.
+ Extract the zip file to a folder of your choice, like `pyb00st`. And perhaps you want to add the path to this
+ folder to PYTHONPATH environment variable.
+
+
 ## Usage ##
 
 You need to know the Bluetooth address of your LEGO BOOST Move Hub (like "00:16:53:A4:CD:7E").
@@ -90,20 +101,30 @@ When you instantiate a movehub object a BLE connection is created. Sometimes thi
  is permanent.
 
 Currently, there is no method to check the presence of external sensors, we need to define it on
-our code.
+ our code.
 
 ## Example: ##
+
+Assuming you have pyb00st files inside a folder named `pyb00st`, this example will connect to your LEGO BOOST
+ Move Hub and print it's name:
 
 ```
 #!/usr/bin/env python3
 
-from pyb00st import MoveHub
+from pyb00st.movehub import MoveHub
+from pyb00st.constants import *
 
 mymovehub = MoveHub("00:16:53:A4:CD:7E", "hci0")
-print( mymovehub.getname() )
+print(mymovehub.getname())
 ```
 
-I'll write some documentation later. For now, see 'examples' folder on source code tree.
+It will also run on Windows, as long as you have a BlueGiga adapter like the BLED112. In that case, the "hci0"
+ argument is just ignored, the BGAPIBackend will autodiscovery it.
+ 
+
+## Documentation ##
+
+I'll write some documentation later. For now, see 'examples' folder in the source code tree.
 
 
 ## Roadmap ##
