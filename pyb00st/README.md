@@ -24,7 +24,7 @@ This was tested with Ubuntu 17.04 on a x64 laptop and also with ev3dev
 - install pygatt
   - sudo pip3 install pygatt
 
-## How to install pygatt on Windows ** ##
+## How to install pygatt on Windows ##
 
 This was tested on a Windows 10 VM:
 - install python for Windows (latest  python3 version, like 'python-3.6.2-amd64')
@@ -38,3 +38,7 @@ This was tested on a Windows 10 VM:
  [known issue](https://github.com/peplin/pygatt/issues/118) so I uninstalled pygatt and
  added a 0.25 delay and now it works (but not always). There is already a fix on github
  so I hope in a short time it will be included in the PyPi repositories.
+ 
+ I was using release 3.1.1. There was a new release, 3.2.0, but problem keeps occurring.
+ 
+ 
