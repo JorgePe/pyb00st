@@ -2,6 +2,7 @@
 
 import pygatt
 from pyb00st.constants import *
+from sys import platform
 
 #
 # To Do:
@@ -64,15 +65,19 @@ class MoveHub:
 # - motors speed (not sure if exists)
 #
 
-    def __init__(self, address, controller): 
+    def __init__(self, address, controller='hci0'):
         self.address = address
         self.controller = controller
 
-#
-# from pygatt source code, GATTToolBackend acepts:
-# hci_device='hci0', gatttool_logfile=None,cli_options=None
-#
-        self.adapter = pygatt.GATTToolBackend(hci_device=controller)
+        # identify operating system and choose proper backend
+
+        if platform.startswith('linux'):
+            self.adapter = pygatt.GATTToolBackend(hci_device=controller)
+        elif platform == "darwin":
+            # really? Does it works with OS X ?
+            self.adapter = pygatt.BGAPIBackend()
+        elif platform == "win32":
+            self.adapter = pygatt.BGAPIBackend()
 
     def start(self):
         self.adapter.start()
