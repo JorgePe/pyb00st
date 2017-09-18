@@ -35,9 +35,12 @@ This was tested on a Windows 10 VM:
   - pip3 install pygatt
  
  The BGAPIBackend had some problems detecting the BLED112. It is a
- [known issue](https://github.com/peplin/pygatt/issues/118) so I uninstalled pygatt and
- added a 0.25 delay and now it works (but not always). There is already a fix on github
- so I hope in a short time it will be included in the PyPi repositories.
+ [known issue](https://github.com/peplin/pygatt/issues/118) so:
+ 
+ - I uninstalled pygatt and donwloaded source
+ - edited pygatt-master\pygatt\backends\bgapip\bgapi.py
+ - added `sleep(0.25)` to `start()` method, after `self._ser.close()`
+ - install with `python setup.py develop`
  
  I was using release 3.1.1. There was a new release, 3.2.0, but problem keeps occurring.
  
