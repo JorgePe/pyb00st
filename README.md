@@ -91,19 +91,36 @@ You need to download at least the files present inside the `pyb00st` folder. If 
 
 ## Usage ##
 
-You need to know the Bluetooth address of your LEGO BOOST Move Hub (like "00:16:53:A4:CD:7E").
+pyb00st implements one class: MoveHub(address, controller)
 
-If you are on linux, you also need the name of your Bluetooth controller (like "hci0"). On other systems
- the controller is ignored as pygatt can autodiscover the BlueGiga controller.
+`address` is the the Bluetooth address of your LEGO BOOST Move Hub (like "00:16:53:A4:CD:7E").
 
-When you instantiate a movehub object a BLE connection is created. Sometimes this connection never completes so
- you need to retry. And although I never saw a stablished connection drop, you should not assume that it is
- is permanent.
+`controller` is only used in linux, it's the HCI name of your Bluetooth BLE controller (like "hci0").
+  On other systems the controller is ignored as pygatt can autodiscover the BlueGiga controller so
+  use ''.
 
-Currently, there is no method to check the presence of external sensors, we need to define it on
- our code.
 
-## Example: ##
+When you `start()` a MoveHub object a BLE session is created from the specified controller.
+ Sometimes this session doesn't succeed so you may need to retry it. And although I never saw a
+ stablished connection drop, you should not assume that it is permanent.
+
+It is possible to instantiate several MoveHub objects. as long as you have one BT BLE controller for each.
+Currently, this is only possible in linux (and never tested, I only one Move Hub).
+
+Each MoveHub object has it's own internal and external ports, associated to devices. Currently, there is
+ no method to check for the presence (and addition or removal) of external devices, so we need to assume
+ it on our code.
+
+Each MoveHub has Input and Output methods to deal with each device.
+
+We can use Output methods directly but for using Input methods we fist need to `subscribe` notifications
+ that are sent from the MoveHub containing information about the devices that are currently active.
+
+
+## Examples: ##
+
+
+### Example 1 - simple connection ###
 
 Assuming you have pyb00st files inside a folder named `pyb00st`, this example will connect to your LEGO BOOST
  Move Hub and print it's name:
@@ -115,11 +132,86 @@ from pyb00st.movehub import MoveHub
 from pyb00st.constants import *
 
 mymovehub = MoveHub("00:16:53:A4:CD:7E", "hci0")
-print(mymovehub.get_name())
+
+try:
+    mymovehub.start()
+    print(mymovehub.get_name())
+
+finally:
+    mymovehub.stop()
 ```
 
 It will also run on Windows, as long as you have a BlueGiga adapter like the BLED112. In that case, the "hci0"
  argument is just ignored, the BGAPIBackend will autodiscovery it.
+
+The `stop()` method closes the BLE session. With BlueGiga adapters it is absolutely required: if we don't
+ instruct the BG adapter to do it, we will have to power off the Move Hub manually. On linux, the GATTool
+ backend automatically closes after a timeout.
+
+
+### Example 2 - simple output ###
+
+This second example turns motor A ON for 1000 ms at 100% duty cycle, first in one direction
+ then in the opposite direction - "Duty cycle" is a term used in Pulse Width Modulation, it
+ can be interpreted as "power" or incorrectly as "speed":
+
+```
+#!/usr/bin/env python3
+
+from pyb00st.movehub import MoveHub
+from pyb00st.constants import *
+from time import sleep
+
+MY_MOVEHUB_ADD = '00:16:53:A4:CD:7E'
+MY_BTCTRLR_HCI = 'hci0'
+
+mymovehub = MoveHub(MY_MOVEHUB_ADD, MY_BTCTRLR_HCI)
+
+try:
+    mymovehub.start()
+    mymovehub.run_motor_for_time(MOTOR_A, 1000, 100)
+    sleep(1)
+    mymovehub.run_motor_for_time(MOTOR_A, 1000, -100)
+    sleep(1)
+
+finally:
+    mymovehub.stop()
+```
+
+
+### Example 3 - simple input ###
+
+This third example activates the internal tilt sensor and continuously polls its state:
+
+```
+#!/usr/bin/env python3
+
+from pyb00st.movehub import MoveHub
+from pyb00st.constants import *
+from time import sleep
+
+MY_MOVEHUB_ADD = '00:16:53:A4:CD:7E'
+MY_BTCTRLR_HCI = 'hci0'
+
+mymovehub = MoveHub(MY_MOVEHUB_ADD, MY_BTCTRLR_HCI)
+
+try:
+    mymovehub.start()
+    mymovehub.subscribe_all()
+    mymovehub.listen_hubtilt(MODE_HUBTILT_BASIC)
+
+    while True:
+        sleep(0.2)
+        if mymovehub.last_hubtilt in TILT_BASIC_VALUES:
+            print(TILT_BASIC_TEXT[mymovehub.last_hubtilt])
+
+finally:
+    mymovehub.stop()
+```
+
+
+Currently there is no way to de-activate a device or cancel a subscription.
+ Will take care of that later.
  
 
 ## Documentation ##
