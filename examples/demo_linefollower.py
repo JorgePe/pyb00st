@@ -9,6 +9,7 @@ from time import sleep
 #  Line Follower
 #  - wheels on motor A and B
 #  - ColorDist sensor on port C
+#  Demo video: https://youtu.be/2QysaaYmy9Q
 #
 
 MY_MOVEHUB_ADD = '00:16:53:A4:CD:7E'
