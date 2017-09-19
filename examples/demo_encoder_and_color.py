@@ -13,7 +13,7 @@ mymovehub = MoveHub(MY_MOVEHUB_ADD, MY_BTCTRLR_HCI)
 try:
     mymovehub.start()
     mymovehub.subscribe_all()
-    mymovehub.listen_encoder_sensor(PORT_D)
+    mymovehub.listen_angle_sensor(PORT_D)
     mymovehub.listen_colordist_sensor(PORT_C)
 
     while True:

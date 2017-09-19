@@ -13,9 +13,9 @@ mymovehub = MoveHub(MY_MOVEHUB_ADD, MY_BTCTRLR_HCI)
 try:
     mymovehub.start()
     mymovehub.subscribe_all()
-    mymovehub.listen_encoder_sensor(PORT_A)
-    mymovehub.listen_encoder_sensor(PORT_B)
-    mymovehub.listen_encoder_sensor(PORT_D)
+    mymovehub.listen_angle_sensor(PORT_A)
+    mymovehub.listen_angle_sensor(PORT_B)
+    mymovehub.listen_angle_sensor(PORT_D)
 
     while True:
         sleep(0.2)

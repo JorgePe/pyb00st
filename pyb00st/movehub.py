@@ -15,7 +15,9 @@ class MoveHub:
     address = ""
     device = object
 
-    # Internal variables to known what is on each port
+    # Internal variables to known what is connected on each port
+    # accept a device type, defined in constants.py
+    # (considering create a device class instead)
     _port_C_is = TYPE_NONE
     _port_D_is = TYPE_NONE
 
@@ -78,20 +80,20 @@ class MoveHub:
         # keeps returning True 
         return self.adapter._con.isalive()
 
-    def getaddress(self):
+    def get_address(self):
         return self.address
 
-    def getname(self):
+    def get_name(self):
         devicename = self.device.char_read_handle(0x07)
         return devicename.decode("utf-8")
 
 #
 #
-# set_led_color() -> set_hub_light(color)
+# set_led_color() -> set_hublight(color)
 #  accepts one of the 10 colors (plus OFF) defined in constants.py
 #
 #
-    def set_hub_light(self, color):
+    def set_hublight(self, color):
         if color in LED_COLORS:
             self.device.write_handle(MOVE_HUB_HARDWARE_HANDLE, SET_LED_COLOR[LED_COLORS.index(color)])
 
@@ -458,7 +460,7 @@ class MoveHub:
 # - there is also an external Interactive Motor, can be at port C or D (probably also at both)
 # - missing reading of port group AB
 #
-    def listen_encoder_sensor(self, port):
+    def listen_angle_sensor(self, port):
         if port in [PORT_A, PORT_B, PORT_C, PORT_D]:
             command = LISTEN_INI
             command += bytes([port])

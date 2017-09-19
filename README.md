@@ -115,7 +115,7 @@ from pyb00st.movehub import MoveHub
 from pyb00st.constants import *
 
 mymovehub = MoveHub("00:16:53:A4:CD:7E", "hci0")
-print(mymovehub.getname())
+print(mymovehub.get_name())
 ```
 
 It will also run on Windows, as long as you have a BlueGiga adapter like the BLED112. In that case, the "hci0"
