@@ -117,6 +117,33 @@ We can use Output methods directly but for using Input methods we fist need to `
  that are sent from the MoveHub containing information about the devices that are currently active.
 
 
+### Available methods: ###
+
+ - General methods:
+   - start()
+   - stop()
+   - is_connected()
+   - get_address()
+   - get_name()
+
+ - Output methods:
+   - run_motor_for_time(motor, time_ms, dutycycle_pct)
+   - run_motors_for_time(motors, time_ms, dutycycle_pct_a, dutycycle_pct_b)
+   - run_motor_for_angle(motor, angle, dutycycle_pct)
+   - run_motor_for_angles(motors, angle, dutycycle_pct_a, dutycycle_pct_b)
+   - motor_wedo(port, dutycycle_pct)
+   - set_hublight(color)
+
+ - Input methods:
+   - subscribe_all()
+   - listen_colordist_sensor(port)
+   - listen_angle_sensor(port)
+   - listen_button()
+   - listen_hubtilt(mode)
+   - listen_wedo_tilt(port, mode)
+   - listen_wedo_distance(port, mode)
+
+
 ## Examples: ##
 
 
@@ -212,7 +239,7 @@ finally:
 
 Currently there is no way to de-activate a device or cancel a subscription.
  Will take care of that later.
- 
+
 
 ## Documentation ##
 
