@@ -1,8 +1,37 @@
-# Running in Linux
+# Installing pyb00st in Linux
 
-pygatt requires root privileges. On Ubuntu and ev3dev it asks for sudo.
+pyb00st requires python 3 and pygatt
 
-From pygatt source code I found 2 workarounds:
+As of today, my 3 linux systems already include pyhton 3:
+- Ubuntu 17.04
+- ev3dev
+- Raspberry Pi's Raspbian
+
+To install pygatt:
+
+```
+sudo apt-get install python3-pip
+sudo pip3 install pexpect
+sudo pip3 install pygatt
+```
+
+To use pyb00st:
+
+```
+mkdir pyb00st
+cd pyb00st
+wget https://github.com/JorgePe/pyb00st/archive/master.zip
+unzip master.zip
+
+cd pyb00st-master
+export PYTHONPATH=.
+./examples/demo_tilt_read.py
+```
+
+pygatt requires root privileges so when running my python script on Ubuntu and ev3dev I get
+a request for sudo password. On Raspbian I don't.
+
+I found 2 workarounds for this requirement:
 
         By default, scanning with gatttool requires root privileges.
         If you don't want to require root, you must add a few
@@ -18,13 +47,13 @@ so:
         setcap 'cap_net_raw,cap_net_admin+eip' `which gatttool`
 ```
 
-Or:
+or:
 ```
         sudo chmod u+s /usr/bin/hcitool
         sudo chmod u+s /usr/bin/gatttool
 ```
 
-I tried both and it didn't work.
+I tried both on my Ubuntu and it didn't work :(
 
-Also I've noticed that after a few runs my HCI device gets stalled and I need to
-reboot to fix it.
+Also I've noticed that sometimes, after a few runs my Ubuntu laptop, the HCI device gets
+stalled and I need to reboot to fix it.
