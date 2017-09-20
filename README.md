@@ -46,9 +46,9 @@ And, of course, a BLE controller is also required. On linux systems, any Bluetoo
 
 ## Supported environments ##
 
-As I only have linux systems, most tests will be done on my Ubuntu laptop (17.04, x64) and, of course,
- on MINDSTORMS EV3 running ev3dev. Ocasionally, I may also test on my Raspberry Pi 3 and Pi Zero W, running
- ev3dev or Raspbian.
+As I only have linux systems, most tests are done on my Ubuntu laptop (17.04, x64) and, of course, on
+ MINDSTORMS EV3 running ev3dev. Ocasionally, I also test on my Raspberry Pi 3 and Pi Zero W, running
+ ev3dev or Raspbian. I wrote a short tutorial on [how to install and use pyb00st on linux](https://github.com/JorgePe/pyb00st/blob/master/linux.md).
 
 I now also test pyb00st on a Windows 10 Virtual Machine but I have  no means to test on OSX. It's supposed
  to work but that's all I can say.
@@ -75,8 +75,8 @@ The package implements:
      - reading WeDo 2.0 Tilt Sensor  
      - reading WeDo 2.0 Distance Sensor (missing some modes)
 
-I've made good progress with the pygatt version and I'm almost considering this code 'beta' level,
-just need to polish it a bit and make detailed tests.
+I've made good progress with the pygatt version and I'm now considering this code 'beta' level,
+ bull still need to polish it a bit and make detailed tests.
 
 
 ## Installation ##
