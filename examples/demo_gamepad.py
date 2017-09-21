@@ -51,11 +51,11 @@ class MotorThread(threading.Thread):
     def run(self):
         while self.running:
             if self.left_dc != 0:
-                mymovehub.run_motor_for_time(MOTOR_B, 100, self.left_dc)
+                mymovehub.run_motor_for_time(MOTOR_B, 200, self.left_dc)
             if self.right_dc != 0:
-                mymovehub.run_motor_for_time(MOTOR_A, 100, self.right_dc)
+                mymovehub.run_motor_for_time(MOTOR_A, 200, self.right_dc)
             if self.left_dc != 0 or self.right_dc != 0:
-                sleep(0.1)
+                sleep(0.2)
 
 #
 # Find Bluetooth Gamepad
