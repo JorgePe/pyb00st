@@ -94,10 +94,10 @@ class MoveHub:
                             self.adapter = pygatt.GATTToolBackend(hci_device=controller)
                         else:
                             # found, use BlueGiga
-                            print('BlueGiga adapter found')
+                            # on Ubuntu laptop it is at '/dev/ttyACM0'
+                            print('BlueGiga adapter found at: ', detected_devices[0].port_name)
                             if controller != '':
                                 # not used yet, trusting on pygatt autofind method
-                                # on my Ubuntu is /dev/ttyACM0
                                 self.controller = controller
                             self.backend = backend
                             self.adapter = pygatt.BGAPIBackend()
