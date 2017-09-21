@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# This demo works only in linux
+# This demo only works in linux
 # It uses a Bluetooth Gamepad that is regognized as an HID device
 # BLUETOOTH HID v1.1b Keyboard [Bluetooth Gamepad]
 #
@@ -15,7 +15,7 @@
 #
 # sudo chmod 777 /dev/input/event20
 #
-# and repeat ff the gamepad enters sleep mode
+# and repeat if the gamepad enters sleep mode
 #
 # can check the device with python3 -m evdev.evtest
 # 20  /dev/input/event20   Bluetooth Gamepad                   34:f3:9a:88:60:7a
@@ -61,14 +61,14 @@ class MotorThread(threading.Thread):
 # Find Bluetooth Gamepad
 #
 
-foundgamepad = False
+gamepad_found = False
 devices = [evdev.InputDevice(fn) for fn in evdev.list_devices()]
 for device in devices:
     if device.name == MY_GAMEPAD_NAME:
-        gamepad = evdev.InputDevice(device.fn)
-        foundgamepad = True
+        my_gamepad = evdev.InputDevice(device.fn)
+        gamepad_found = True
 
-if foundgamepad == False:
+if gamepad_found == False:
     print('\'{}\' not found'.format(MY_GAMEPAD_NAME))
     exit()
 else:
@@ -86,7 +86,7 @@ try:
     motor_thread.setDaemon(True)
     motor_thread.start()
 
-    for event in gamepad.read_loop():
+    for event in my_gamepad.read_loop():
         #print(event)
         if event.type == 3:
             # joystick or pad event
