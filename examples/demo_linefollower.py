@@ -33,7 +33,7 @@ def back():
     mymovehub.run_motors_for_time(MOTOR_AB, 100, -20, -20)
     sleep(0.1)
 
-mymovehub = MoveHub(MY_MOVEHUB_ADD, 'BlueZ', MY_BTCTRLR_HCI)
+mymovehub = MoveHub(MY_MOVEHUB_ADD, 'Auto', MY_BTCTRLR_HCI)
 
 try:
     mymovehub.start()

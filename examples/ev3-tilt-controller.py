@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+#
+# This example runs only on ev3dev
+#
+
 from pyb00st.movehub import MoveHub
 from pyb00st.constants import *
 import ev3dev.ev3 as ev3

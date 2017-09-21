@@ -10,7 +10,7 @@ MY_BTCTRLR_HCI = 'hci0'
 
 #mymovehub = MoveHub(MY_MOVEHUB_ADD, 'BlueZ', MY_BTCTRLR_HCI)
 #mymovehub = MoveHub(MY_MOVEHUB_ADD, 'BlueGiga', '')
-mymovehub = MoveHub(MY_MOVEHUB_ADD, 'Auto', '')
+mymovehub = MoveHub(MY_MOVEHUB_ADD, 'Auto', MY_BTCTRLR_HCI)
 
 try:
     mymovehub.start()
