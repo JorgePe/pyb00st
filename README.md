@@ -37,11 +37,11 @@ Inititally, pyb00st was intended for linux only (don't give up yet, good news ah
 
  Python 3 is also needed. It is not a really requirement *per se* but I want to use pyb00st with
   LEGO MINDSTORMS EV3 (by running ev3dev) and since python 2 is no longer supported by the project I had
-  no choice (and really, python 2 has to go some day)
+  no choice (and really, python 2 has to go some day).
 
 And, of course, a BLE controller is also required. On linux systems, any Bluetooth 4.0 BLE device is OK
  as long as it is supported by the kernel. On other systems a BlueGiga adapter (like the BLED112) is
- required.
+ required (it also works on linux, by the way).
 
 
 ## Supported environments ##
@@ -53,10 +53,13 @@ As I only have linux systems, most tests are done on my Ubuntu laptop (17.04, x6
 I now also test pyb00st on a Windows 10 Virtual Machine but I have  no means to test on OSX. It's supposed
  to work but that's all I can say.
 
-On linux, the gatttool backend approach results in slower performance than pygattlib. But it also requires
- much less dependencies... The old version of pyb00st based on pygattlib is still available on 'other' folder
- but it lacks all input methods.
- If problems with nofications on python 3 gets fixed, I'll probably backport all code.
+On linux, the BlueZ backend approach results in slower performance than pygattlib and there seems to be a
+ stability problem with the HCI controller. But it also requires much less dependencies... If this affects
+ you, perhaps it's better to use the BlueGiga backend also on linux.
+
+The old version of pyb00st based on pygattlib is still available on 'other' folder but it lacks all input
+ methods and several other developments. If problems with nofications on python 3 ever gets fixed, I'll
+ probably backport all code but for now is freeze.
 
 
 ## Status: ##
@@ -91,13 +94,20 @@ You need to download at least the files present inside the `pyb00st` folder. If 
 
 ## Usage ##
 
-pyb00st implements one class: MoveHub(address, controller)
+pyb00st implements one class: MoveHub(address, backend, controller)
 
 `address` is the the Bluetooth address of your LEGO BOOST Move Hub (like "00:16:53:A4:CD:7E").
 
-`controller` is only used in linux, it's the HCI name of your Bluetooth BLE controller (like "hci0").
-  On other systems the controller is ignored as pygatt can autodiscover the BlueGiga controller so
-  use ''.
+`backend` chooses the pygatt backend. There are 3 options: 'Auto', 'BlueZ' and 'BlueGiga'.
+  - 'Auto' always tries to use the BlueGiga adapter but on linux, if no adapter is found, it reverts
+ to BlueZ and uses the specified `controller`
+  - 'Bluez' only works on linux ((like Ubuntu, Raspbian and ev3dev)), it uses the BlueZ backend with the
+ specified `controller`
+  - 'BlueGiga' uses the BlueGiga backeend with a compatible adapter and just ignores `controller`
+
+`controller` is only required in linux with 'BlueZ' backend, it's the HCI name of the Bluetooth BLE controller
+  (like 'hci0'). It's not used with 'BlueGiga' backend so just '' is enough.
+
 
 
 When you `start()` a MoveHub object a BLE session is created from the specified controller.
@@ -158,7 +168,7 @@ Assuming you have pyb00st files inside a folder named `pyb00st`, this example wi
 from pyb00st.movehub import MoveHub
 from pyb00st.constants import *
 
-mymovehub = MoveHub("00:16:53:A4:CD:7E", "hci0")
+mymovehub = MoveHub('00:16:53:A4:CD:7E', 'Auto', 'hci0')
 
 try:
     mymovehub.start()
@@ -168,7 +178,7 @@ finally:
     mymovehub.stop()
 ```
 
-It will also run on Windows, as long as you have a BlueGiga adapter like the BLED112. In that case, the "hci0"
+It will also run on Windows, as long as you have a BlueGiga adapter like the BLED112. In that case, the 'hci0'
  argument is just ignored, the BGAPIBackend will autodiscovery it.
 
 The `stop()` method closes the BLE session. With BlueGiga adapters it is absolutely required: if we don't
@@ -192,7 +202,7 @@ from time import sleep
 MY_MOVEHUB_ADD = '00:16:53:A4:CD:7E'
 MY_BTCTRLR_HCI = 'hci0'
 
-mymovehub = MoveHub(MY_MOVEHUB_ADD, MY_BTCTRLR_HCI)
+mymovehub = MoveHub(MY_MOVEHUB_ADD, 'Auto', MY_BTCTRLR_HCI)
 
 try:
     mymovehub.start()
@@ -220,7 +230,7 @@ from time import sleep
 MY_MOVEHUB_ADD = '00:16:53:A4:CD:7E'
 MY_BTCTRLR_HCI = 'hci0'
 
-mymovehub = MoveHub(MY_MOVEHUB_ADD, MY_BTCTRLR_HCI)
+mymovehub = MoveHub(MY_MOVEHUB_ADD, 'Auto', MY_BTCTRLR_HCI)
 
 try:
     mymovehub.start()

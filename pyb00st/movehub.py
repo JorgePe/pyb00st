@@ -4,6 +4,10 @@ import pygatt
 from pyb00st.constants import *
 from sys import platform
 
+BLED112_VENDOR_ID = 0x2458
+BLED112_PRODUCT_ID = 0x0001
+from pygatt.backends.bgapi.util import find_usb_serial_devices
+
 #
 # To Do:
 # - maybe create a list of devices instead of using so many variables
@@ -12,7 +16,10 @@ from sys import platform
 
 
 class MoveHub:
-    address = ""
+    address = ''
+    backend = ''
+    system = ''
+    controller = ''
     device = object
 
     # Internal variables to known what is connected on each port
@@ -53,19 +60,74 @@ class MoveHub:
 # - motors speed (not sure if exists)
 #
 
-    def __init__(self, address, controller='hci0'):
+    # Backends: 'Auto', 'BlueZ' (linux only) or 'BlueGiga'
+    # 'Auto' first checks the operating system:
+    #  - if linux and a BlueGiga adapter is found it uses 'BlueGiga'
+    #  - if linux but no BlueGiga found it uses 'to BlueZ'
+    #  - if not linux it always uses 'BlueGiga'
+
+
+    def __init__(self, address, backend='BlueZ', controller='hci0'):
         self.address = address
-        self.controller = controller
 
-        # identify operating system and choose proper backend
+        if backend in ['Auto', 'BlueZ', 'BlueGiga']:
+            self.system = platform
+            print('System: ',self.system)
 
-        if platform.startswith('linux'):
-            self.adapter = pygatt.GATTToolBackend(hci_device=controller)
-        elif platform == "darwin":
-            # really? Does it works with OS X ?
-            self.adapter = pygatt.BGAPIBackend()
-        elif platform == "win32":
-            self.adapter = pygatt.BGAPIBackend()
+            if self.system.startswith('linux'):
+                self.system='linux'
+
+            if self.system in ['linux','win32', 'darwin']:
+                if backend == 'Auto':
+                    if self.system == 'linux':
+                        # check for BlueGiga
+
+                        print('Checking...')
+                        detected_devices = find_usb_serial_devices(
+                            vendor_id=BLED112_VENDOR_ID,
+                            product_id=BLED112_PRODUCT_ID)
+                        if len(detected_devices) == 0:
+                            # not found, use BlueZ
+                            print('No BlueGiga adapter found, reverting to BlueZ')
+                            self.controller = controller
+                            self.backend = backend
+                            self.adapter = pygatt.GATTToolBackend(hci_device=controller)
+                        else:
+                            # found, use BlueGiga
+                            print('BlueGiga adapter found')
+                            if controller != '':
+                                # not used yet, trusting on pygatt autofind method
+                                # on my Ubuntu is /dev/ttyACM0
+                                self.controller = controller
+                            self.backend = backend
+                            self.adapter = pygatt.BGAPIBackend()
+
+                    else:
+                        # not linux
+                        if controller != '':
+                            # not used yet, trusting on pygatt autofind method
+                            self.controller = controller
+                        self.backend = backend
+                        self.adapter = pygatt.BGAPIBackend()
+
+                elif backend == 'BlueZ':
+                    self.controller = controller
+                    self.backend = backend
+                    self.adapter = pygatt.GATTToolBackend(hci_device=controller)
+
+                elif backend == 'BlueGiga':
+                    if controller != '':
+                        # not used yet, trusting on pygatt autofind method
+                        # on my Ubuntu is /dev/ttyACM0
+                        self.controller = controller
+                    self.backend = backend
+                    self.adapter = pygatt.BGAPIBackend()
+
+            else:
+                print('{} is not supported'.format(platform))
+
+        else:
+            print('Invalid backend option, must be BlueZ (linux), BlueGiga (all systems) or Auto')
 
     def start(self):
         self.adapter.start()

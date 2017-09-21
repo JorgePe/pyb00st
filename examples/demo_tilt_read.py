@@ -8,10 +8,13 @@ from time import sleep
 MY_MOVEHUB_ADD = '00:16:53:A4:CD:7E'
 MY_BTCTRLR_HCI = 'hci0'
 
-mymovehub = MoveHub(MY_MOVEHUB_ADD, MY_BTCTRLR_HCI)
+#mymovehub = MoveHub(MY_MOVEHUB_ADD, 'BlueZ', MY_BTCTRLR_HCI)
+#mymovehub = MoveHub(MY_MOVEHUB_ADD, 'BlueGiga', '')
+mymovehub = MoveHub(MY_MOVEHUB_ADD, 'Auto', '')
 
 try:
     mymovehub.start()
+    print(mymovehub.backend)
     mymovehub.subscribe_all()
     mymovehub.listen_hubtilt(MODE_HUBTILT_BASIC)
 

@@ -11,7 +11,7 @@ MY_BTCTRLR_HCI = 'hci0'
 
 espeak.set_voice = 'en'
 
-mymovehub = MoveHub(MY_MOVEHUB_ADD, MY_BTCTRLR_HCI)
+mymovehub = MoveHub(MY_MOVEHUB_ADD, 'BlueZ', MY_BTCTRLR_HCI)
 
 try:
     mymovehub.start()

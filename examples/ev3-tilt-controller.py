@@ -12,7 +12,7 @@ MY_BTCTRLR_HCI = 'hci1'
 m1 = ev3.LargeMotor('outA')
 m2 = ev3.LargeMotor('outB')
 
-mymovehub = MoveHub(MY_MOVEHUB_ADD, MY_BTCTRLR_HCI)
+mymovehub = MoveHub(MY_MOVEHUB_ADD, 'BlueZ', MY_BTCTRLR_HCI)
 mymovehub.subscribe_all()
 mymovehub.listen_hubtilt(MODE_HUBTILT_BASIC)
 

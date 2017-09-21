@@ -28,7 +28,7 @@ export PYTHONPATH=.
 ./examples/demo_tilt_read.py
 ```
 
-pygatt requires root privileges so when running my python script on Ubuntu and ev3dev I get
+BlueZ backend requires root privileges so when running my python script on Ubuntu and ev3dev I get
 a request for sudo password. On Raspbian I don't.
 
 I found 2 workarounds for this requirement:
@@ -57,3 +57,8 @@ I tried both on my Ubuntu and it didn't work :(
 
 Also I've noticed that sometimes, after a few runs my Ubuntu laptop, the HCI device gets
 stalled and I need to reboot to fix it.
+
+
+The BlueGiga backend doesn't requires sudo password (at least not on my Ubuntu laptop). And
+ never noticed stability or performance problems.
+
