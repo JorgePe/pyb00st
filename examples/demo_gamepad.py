@@ -4,6 +4,7 @@
 # It uses a Bluetooth Gamepad to wireless control a car
 # and the Color Distance sensor (at port C) to prevent collisions
 # after motor stop, you need to press Button to restart
+# Video: https://youtu.be/e7BXDpAh2AQ
 #
 # I use a Bluetooth gamepad that is recognized by linux
 # as an HID device:
