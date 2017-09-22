@@ -20,6 +20,10 @@
 # can check the device with python3 -m evdev.evtest
 # 20  /dev/input/event20   Bluetooth Gamepad                   34:f3:9a:88:60:7a
 #
+# This also only works with BlueGiga adapter.
+# I think BlueZ backend doesn't work when HCI controller already
+# paired with the gamepad
+#
 
 from pyb00st.movehub import MoveHub
 from pyb00st.constants import *
