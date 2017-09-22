@@ -3,10 +3,10 @@
 import pygatt
 from pyb00st.constants import *
 from sys import platform
+from pygatt.backends.bgapi.util import find_usb_serial_devices
 
 BLED112_VENDOR_ID = 0x2458
 BLED112_PRODUCT_ID = 0x0001
-from pygatt.backends.bgapi.util import find_usb_serial_devices
 
 #
 # To Do:
@@ -72,12 +72,12 @@ class MoveHub:
 
         if backend in ['Auto', 'BlueZ', 'BlueGiga']:
             self.system = platform
-            print('System: ',self.system)
+            print('System: ', self.system)
 
             if self.system.startswith('linux'):
-                self.system='linux'
+                self.system = 'linux'
 
-            if self.system in ['linux','win32', 'darwin']:
+            if self.system in ['linux', 'win32', 'darwin']:
                 if backend == 'Auto':
                     if self.system == 'linux':
                         # check for BlueGiga
