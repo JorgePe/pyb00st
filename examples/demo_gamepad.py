@@ -1,11 +1,16 @@
 #!/usr/bin/env python3
 
-# This demo only works in linux
-# It uses a Bluetooth Gamepad that is regognized as an HID device
+# Sorry, this demo only works in linux
+# It uses a Bluetooth Gamepad to wireless control a car
+# and the Color Distance sensor (at port C) to prevent collisions
+# after motor stop, you need to press Button to restart
+#
+# I use a Bluetooth gamepad that is recognized by linux
+# as an HID device:
 # BLUETOOTH HID v1.1b Keyboard [Bluetooth Gamepad]
 #
-# before start make sure gamepad is paired
-# evdev library needs root/sudo or user member of plugdev / input
+# To read the Gamepad I use evdev library
+# it needs root/sudo or membership of plugdev / input
 #
 # ls -l /dev/input/
 # crw-rw---- 1 root input 13, 64 set 21 09:25 event0
@@ -15,14 +20,14 @@
 #
 # sudo chmod 777 /dev/input/event20
 #
-# and repeat if the gamepad enters sleep mode
+# and always repeat when the gamepad enters sleep mode
 #
-# can check the device with python3 -m evdev.evtest
-# 20  /dev/input/event20   Bluetooth Gamepad                   34:f3:9a:88:60:7a
+# can check the device with python3 -m evdev.evtest :
+# 20  /dev/input/event20   Bluetooth Gamepad    34:f3:9a:88:60:7a
 #
-# This also only works with BlueGiga adapter.
 # I think BlueZ backend doesn't work when HCI controller already
-# paired with the gamepad
+# paired with the gamepad so you need multiple HCI controllers
+# or one HCI controller and a BlueGiga adapter
 #
 
 from pyb00st.movehub import MoveHub
@@ -42,7 +47,10 @@ MY_GAMEPAD_NAME = 'Bluetooth Gamepad'
 # motors are controlled by changing right/left duty cycles
 #
 
-class MotorThread(threading.Thread):
+emergency_stop = False
+
+
+class MotorsThread(threading.Thread):
 
     right_dc = 0
     left_dc = 0
@@ -50,20 +58,50 @@ class MotorThread(threading.Thread):
     def __init__(self):
         self.running = True
         threading.Thread.__init__(self)
-        print("Ready")
+        print("Motor Thread Ready")
 
     def run(self):
+        global emergency_stop
+
         while self.running:
-            if self.left_dc != 0:
-                mymovehub.run_motor_for_time(MOTOR_B, 200, self.left_dc)
-            if self.right_dc != 0:
-                mymovehub.run_motor_for_time(MOTOR_A, 200, self.right_dc)
-            if self.left_dc != 0 or self.right_dc != 0:
-                sleep(0.2)
+            if not emergency_stop:
+                if self.left_dc != 0:
+                    mymovehub.run_motor_for_time(MOTOR_B, 200, self.left_dc)
+                if self.right_dc != 0:
+                    mymovehub.run_motor_for_time(MOTOR_A, 200, self.right_dc)
+                if self.left_dc != 0 or self.right_dc != 0:
+                    sleep(0.2)
+
+
+class SensorsThread(threading.Thread):
+
+    def __init__(self):
+        self.running = True
+        threading.Thread.__init__(self)
+        print('Distance Thread Ready')
+
+    def run(self):
+        global emergency_stop
+
+        while self.running:
+            if emergency_stop:
+                if mymovehub.last_button == BUTTON_PRESSED:
+                    emergency_stop = False
+                    print('Restart')
+
+            else:
+                distance = mymovehub.last_distance_C
+                print('Distance: ', distance)
+                if distance != '' and distance < 6:
+                    print('Stop!')
+                    emergency_stop = True
+
+            sleep(0.1)
 
 #
 # Find Bluetooth Gamepad
 #
+
 
 gamepad_found = False
 devices = [evdev.InputDevice(fn) for fn in evdev.list_devices()]
@@ -72,7 +110,7 @@ for device in devices:
         my_gamepad = evdev.InputDevice(device.fn)
         gamepad_found = True
 
-if gamepad_found == False:
+if not gamepad_found:
     print('\'{}\' not found'.format(MY_GAMEPAD_NAME))
     exit()
 else:
@@ -86,12 +124,20 @@ mymovehub = MoveHub(MY_MOVEHUB_ADD, 'Auto', MY_BTCTRLR_HCI)
 
 try:
     mymovehub.start()
-    motor_thread = MotorThread()
-    motor_thread.setDaemon(True)
-    motor_thread.start()
+    mymovehub.subscribe_all()
+    mymovehub.listen_colordist_sensor(PORT_C)
+    mymovehub.listen_button()
+
+    sensors_thread = SensorsThread()
+    sensors_thread.setDaemon(True)
+    sensors_thread.start()
+
+    motors_thread = MotorsThread()
+    motors_thread.setDaemon(True)
+    motors_thread.start()
 
     for event in my_gamepad.read_loop():
-        #print(event)
+        # print(event)
         if event.type == 3:
             # joystick or pad event
 
@@ -102,16 +148,17 @@ try:
 
             if event.code == 1:
                 # left.joystick,  Y
-                MotorThread.left_dc = int((event.value - 128)/1.28)
+                MotorsThread.left_dc = int((event.value - 128) / 1.28)
 
             if event.code == 5:
                 # right joystick, Y
-                MotorThread.right_dc = int((event.value - 128)/1.28)
+                MotorsThread.right_dc = int((event.value - 128) / 1.28)
 
             if event.code == 2:
                 # right joystick, X
                 pass
 
 finally:
-    motor_thread.running=False
+    motors_thread.running = False
+    sensors_thread.running = False
     mymovehub.stop()

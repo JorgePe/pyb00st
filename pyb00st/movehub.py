@@ -371,7 +371,7 @@ class MoveHub:
                             self.last_distance_C = ''
                         else:
                             self.last_color_C = ''
-                            self.last_distance_C = str(value[5])
+                            self.last_distance_C = value[5]
 
                     elif self._port_C_is == TYPE_ENCODERMOTOR:
 
@@ -389,7 +389,7 @@ class MoveHub:
                             self.last_distance_D = ''
                         else:
                             self.last_color_D = ''
-                            self.last_distance_D = str(value[5])
+                            self.last_distance_D = value[5]
 
                     elif self._port_D_is == TYPE_ENCODERMOTOR:
                         self.last_angle_D = value[4] + \
