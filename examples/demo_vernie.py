@@ -5,10 +5,9 @@
 # It uses a Bluetooth Gamepad to wireless control Vernie
 # Left and Right Joysticks (just Y axis) control track motors (A and B)
 # Pad (just X axis) controls head motor (D)
-# and the Color Distance sensor (at port C) is still used
-# like in demo_gamepad to prevent collisions
-# after motor stop, you need to press Button to restart
-# Video: https://youtu.be/e7BXDpAh2AQ
+# and the Color Distance sensor (at port C) is used
+# to read distances and react to colors
+# (but color precision is awful, onlye RED and BLACK really work)
 #
 # I use a Bluetooth gamepad that is recognized by linux
 # as an HID device:
@@ -99,10 +98,60 @@ class SensorsThread(threading.Thread):
 
             else:
                 distance = mymovehub.last_distance_C
-                print('Distance: ', distance)
-                if distance != '' and distance < 5:
-                    print('Stop!')
-                    emergency_stop = True
+                color = mymovehub.last_color_C
+                print('Distance: {}\nColor: {}\n'.format(distance,color))
+                if distance != '' and distance < 4:
+                    print('Danger!')
+                    # disabled to allow color reading to work
+                    # emergency_stop = True
+
+                elif color != '':
+                    if color == 'RED':
+                        # go back a bit
+                        MotorsThread.left_dc = -100
+                        MotorsThread.right_dc = -100
+                        sleep(3)
+                        MotorsThread.left_dc = 0
+                        MotorsThread.right_dc = 0
+                    elif color == 'YELLOW':
+                        # turn
+                        MotorsThread.left_dc = -100
+                        MotorsThread.right_dc = 100
+                        sleep(3)
+                        MotorsThread.left_dc = 0
+                        MotorsThread.right_dc = 0
+                    elif color == 'GREEN':
+                        # turn
+                        MotorsThread.left_dc = 100
+                        MotorsThread.right_dc = -100
+                        sleep(3)
+                        MotorsThread.left_dc = 0
+                        MotorsThread.right_dc = 0
+                    elif color == 'WHITE':
+                        # go front
+                        MotorsThread.left_dc = -100
+                        MotorsThread.right_dc = -100
+                        sleep(3)
+                        MotorsThread.left_dc = 0
+                        MotorsThread.right_dc = 0
+                    elif color == 'BLACK':
+                        # make a little walk
+                        MotorsThread.left_dc = 100
+                        MotorsThread.right_dc = 100
+                        sleep(3)
+                        MotorsThread.left_dc = 100
+                        MotorsThread.right_dc = -100
+                        sleep(3)
+                        MotorsThread.left_dc = 100
+                        MotorsThread.right_dc = 100
+                        sleep(3)
+                        MotorsThread.left_dc = -100
+                        MotorsThread.right_dc = 100
+                        sleep(3)
+                        MotorsThread.left_dc = 0
+                        MotorsThread.right_dc = 0
+                    elif color == 'BLUE':
+                        pass
 
             sleep(0.1)
 
