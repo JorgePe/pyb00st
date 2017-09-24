@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
 # Sorry, this demo only works in linux
-#
+# Video: https://youtu.be/FMG_GnVzicE
+
 # It uses a Bluetooth Gamepad to wireless control Vernie
 # Left and Right Joysticks (just Y axis) control track motors (A and B)
 # Pad (just X axis) controls head motor (D)
