@@ -1,0 +1,6 @@
+*.sw?
+__pycache__
+MANIFEST
+dist
+etc/config.yml
+build
