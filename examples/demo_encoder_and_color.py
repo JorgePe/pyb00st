@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 
+from pyb00st import B00stConfig
 from pyb00st.movehub import MoveHub
-from pyb00st.constants import *
+from pyb00st.constants import PORT_D, PORT_C
 
 from time import sleep
 
-MY_MOVEHUB_ADD = '00:16:53:A4:CD:7E'
-MY_BTCTRLR_HCI = 'hci0'
+CFG = B00stConfig()
 
-mymovehub = MoveHub(MY_MOVEHUB_ADD, 'BlueZ', MY_BTCTRLR_HCI)
+mymovehub = MoveHub(CFG.MY_MOVEHUB_ADD, 'BlueZ', CFG.MY_BTCTRLR_HCI)
 
 try:
     mymovehub.start()
@@ -19,5 +19,7 @@ try:
     while True:
         sleep(0.2)
         print('Motor D: {} Color: {}'.format(mymovehub.last_angle_D, mymovehub.last_color_C))
+except KeyboardInterrupt:
+    print("\nCTRL-C pressed! Exiting ...")
 finally:
     mymovehub.stop()
