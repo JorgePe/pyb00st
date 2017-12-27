@@ -16,9 +16,9 @@
 #
 
 %define pypi_name pyb00st
-%{?!python_module:%define python_module() python-%{**} python3-%{**}}
+%define skip_python2 1
 
-Name:           python-%{pypi_name}
+Name:           python3-%{pypi_name}
 Version:        0.0.0
 Release:        0
 Summary:        Python for LEGO BOOST
@@ -29,10 +29,13 @@ Source:         %{pypi_name}-%{version}.tar.gz
 BuildRequires:  python-rpm-macros
 BuildRequires:  fdupes
 BuildRequires:  python3
+%if 0%{?fedora}
+BuildRequires:  python3-devel
+%define  debug_package %{nil}
+%endif
+
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 Requires:       python3
-
-%python_subpackages
 
 %description
 The LEGO BOOST Move Hub is a BLE (Bluetooth Low Energy) device like the LEGO WeDo 2.0 Smart Hub
@@ -60,16 +63,14 @@ By the way...
 %setup -q -n %{pypi_name}-%{version}
 
 %build
-%python_build
+python3 setup.py build
 
 %install
-%python_install
-%python_expand %fdupes %{buildroot}%{$python_sitelib}/pyb00st
+python3 setup.py install --prefix=%{_prefix} --root=%{buildroot}
 
-%files  %{python_files}
+%files
 %defattr(-,root,root)
 %doc README.md
-%{python_sitelib}/*
+%{python3_sitelib}/*
 
 %changelog
-
