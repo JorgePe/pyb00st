@@ -4,3 +4,5 @@ MANIFEST
 dist
 etc/config.yml
 build
+*.pyc
+*.pyo
