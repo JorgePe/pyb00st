@@ -37,6 +37,8 @@ BuildRequires:  python3-devel
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 Requires:       python3
 Requires:       python3-pygatt
+Requires:       python3-PyYAML
+
 %description
 The LEGO BOOST Move Hub is a BLE (Bluetooth Low Energy) device like the LEGO WeDo 2.0 Smart Hub
  and the Vengit SBrick which I already managed to control with the LEGO MINDSTORMS EV3 thanks to
