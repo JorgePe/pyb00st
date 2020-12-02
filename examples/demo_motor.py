@@ -7,10 +7,10 @@ from time import sleep
 
 import os
 
-SHAM_MOVEHUB = os.environ.get('MYMOVEHUB')
+ENV_MOVEHUB = os.environ.get('MYMOVEHUB')
 
 #MY_MOVEHUB_ADD = '00:16:53:AB:EB:25'
-MY_MOVEHUB_ADD = SHAM_MOVEHUB
+MY_MOVEHUB_ADD = ENV_MOVEHUB
 MY_BTCTRLR_HCI = 'hci0'
 
 mymovehub = MoveHub(MY_MOVEHUB_ADD, 'BlueZ', MY_BTCTRLR_HCI)
