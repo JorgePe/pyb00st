@@ -6,7 +6,9 @@ from pyb00st.constants import *
 from espeak import espeak  # apt install python3-espeak
 from time import sleep
 
-MY_MOVEHUB_ADD = '00:16:53:A4:CD:7E'
+import os
+
+MY_MOVEHUB_ADD = os.environ.get('MYMOVEHUB')
 MY_BTCTRLR_HCI = 'hci0'
 
 espeak.set_voice = 'en'
