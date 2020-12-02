@@ -10,7 +10,9 @@ import ev3dev.ev3 as ev3
 
 from time import sleep
 
-MY_MOVEHUB_ADD = '00:16:53:A4:CD:7E'
+import os
+
+MY_MOVEHUB_ADD = os.environ.get('MYMOVEHUB')
 MY_BTCTRLR_HCI = 'hci1'
 
 m1 = ev3.LargeMotor('outA')

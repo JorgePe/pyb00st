@@ -38,7 +38,9 @@ from time import sleep
 import evdev
 import threading
 
-MY_MOVEHUB_ADD = '00:16:53:A4:CD:7E'
+import os
+
+MY_MOVEHUB_ADD = os.environ.get('MYMOVEHUB')
 MY_BTCTRLR_HCI = 'hci0'
 
 MY_GAMEPAD_NAME = 'Bluetooth Gamepad'

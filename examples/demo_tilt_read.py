@@ -5,8 +5,9 @@ from pyb00st.constants import *
 
 from time import sleep
 
-# MY_MOVEHUB_ADD = '00:16:53:A4:CD:7E'
-MY_MOVEHUB_ADD = '00:16:53:AB:EB:25'
+import os
+
+MY_MOVEHUB_ADD = os.environ.get('MYMOVEHUB')
 MY_BTCTRLR_HCI = 'hci0'
 
 mymovehub = MoveHub(MY_MOVEHUB_ADD, 'BlueZ', MY_BTCTRLR_HCI)

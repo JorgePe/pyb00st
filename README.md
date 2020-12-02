@@ -44,6 +44,20 @@ And, of course, a BLE controller is also required. On linux systems, any Bluetoo
  required (it also works on linux, by the way).
 
 
+	# GBSHAHAQ edit:
+	Hardcoded Hub addresses have been replaced in the examples with a fetch of environment 
+	variable for the Boost hub.
+	I found the address of mine from my Raspberry Pi (Buster) using 
+		sudo hcitool lescan
+	Useful BLE resource: https://www.instructables.com/Control-Bluetooth-LE-Devices-From-A-Raspberry-Pi
+	Then export this as an environment variable called "MYMOVEHUB"
+
+	Linux: export MYMOVEHUB="[insert MAC address]"
+	To persist it, add it your shell profile - for bash, add this line to the ~/.bashrc file.
+
+	Windows: set (or setx for persistence)
+		 set MYMOVEHUB "[insert MAC address]"
+	
 ## Supported environments ##
 
 As I only have linux systems, most tests are done on my Ubuntu laptop (17.04, x64) and, of course, on

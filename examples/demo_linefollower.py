@@ -5,6 +5,7 @@ from pyb00st.constants import *
 
 from time import sleep
 
+import os
 #
 #  Line Follower
 #  - wheels on motor A and B
@@ -12,7 +13,7 @@ from time import sleep
 #  Demo video: https://youtu.be/2QysaaYmy9Q
 #
 
-MY_MOVEHUB_ADD = '00:16:53:A4:CD:7E'
+MY_MOVEHUB_ADD = os.environ.get('MYMOVEHUB')
 MY_BTCTRLR_HCI = 'hci0'
 
 delay = 0.0 # delay at the end of each cycle
